@@ -34,6 +34,7 @@ bool Mkdir::Ingresar_Datos(){
 
 bool Mkdir::Verificar_Datos(){
     if(v.Ver_Path2())
+    return true;
     return false;
 }
 

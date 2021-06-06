@@ -35,6 +35,7 @@ bool Edit::Ingresar_Datos(){
 bool Edit::Verificar_Datos(){
     if(v.Ver_Cont())
     if(v.Ver_Path3())
+    return true;
     return false;
 }
 

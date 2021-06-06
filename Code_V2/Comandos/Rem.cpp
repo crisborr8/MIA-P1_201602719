@@ -28,6 +28,7 @@ bool Rem::Ingresar_Datos(){
 
 bool Rem::Verificar_Datos(){
     if(v.Ver_Path2())
+    return true;
     return false;
 }
 

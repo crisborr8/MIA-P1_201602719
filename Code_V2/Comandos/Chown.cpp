@@ -41,6 +41,7 @@ bool Chown::Ingresar_Datos(){
 bool Chown::Verificar_Datos(){
     if(v.Ver_Path2())
     if(v.Ver_Usr())
+    return true;
     return false;
 }
 
