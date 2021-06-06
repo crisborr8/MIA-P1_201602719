@@ -1,6 +1,4 @@
-#include "Headers.h"
-#include "Comandos/Mkdisk.cpp"
-Mkdisk mkdisk;
+#include "Extras/Includes.cpp"
 
 Menu::Menu(){
     comando_inicial = "";
@@ -33,7 +31,38 @@ void Menu::Comando(){
     comando = e.trimL(comando);
     if(comando.length() > 0) comando += " ";
 
-    if(comando_inicial == "mkdisk") mkdisk.Inicializar();
+    if(comando_inicial == "cat") cat.Inicializar();
+    else if(comando_inicial == "chgrp") chgrp.Inicializar();
+    else if(comando_inicial == "chmod") chmod.Inicializar();
+    else if(comando_inicial == "chown") chown.Inicializar();
+    else if(comando_inicial == "cp") cp.Inicializar();
+    else if(comando_inicial == "edit") edit.Inicializar();
+    else if(comando_inicial == "exec") exec.Inicializar();
+    else if(comando_inicial == "fdisk") fdisk.Inicializar();
+    else if(comando_inicial == "find") find_.Inicializar();
+    else if(comando_inicial == "login") login.Inicializar();
+    else if(comando_inicial == "logut") logout.Inicializar();
+    else if(comando_inicial == "mkdir") mkdir.Inicializar();
+    else if(comando_inicial == "mkdisk") mkdisk.Inicializar();
+    else if(comando_inicial == "mkfile") mkfile.Inicializar();
+    else if(comando_inicial == "mkfs") mkfs.Inicializar();
+    else if(comando_inicial == "mkgrp") mkgrp.Inicializar();
+    else if(comando_inicial == "mkusr") mkusr.Inicializar();
+    else if(comando_inicial == "mount") mount.Inicializar();
+    else if(comando_inicial == "mv") mv.Inicializar();
+    else if(comando_inicial == "pause") pause.Inicializar();
+    else if(comando_inicial == "rem") rem.Inicializar();
+    else if(comando_inicial == "ren") ren.Inicializar();
+    else if(comando_inicial == "rep") rep.Inicializar();
+    else if(comando_inicial == "rmdisk") rmdisk.Inicializar();
+    else if(comando_inicial == "rmgrp") rmgrp.Inicializar();
+    else if(comando_inicial == "rmusr") rmusr.Inicializar();
+    else if(comando_inicial == "unmount") unmount.Inicializar();
     else if(comando_inicial != "exit")
         cout << "ERROR!! INGRESE UN COMANDO VALIDO" << endl;
+}
+
+int main()
+{
+    Menu();
 }

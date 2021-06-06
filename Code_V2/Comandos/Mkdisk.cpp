@@ -1,9 +1,8 @@
 #include "../Headers.h"
-#include "../Ingresar.cpp"
-#include "../Verificar.cpp"
 
 void Mkdisk::Inicializar(){
     error = false;
+    
     path = "";
     size = 0;
     f = "ff";
@@ -18,17 +17,17 @@ bool Mkdisk::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-f=") == 0){
-            error = i.Ing_Char("-f=");
+            error = i.Ing_Palabra("-f=");
             if(error) break;
             f = ing_palabra;
         } 
         else if(comando_inicial.find("-u=") == 0){
-            error = i.Ing_Char("-u=");
+            error = i.Ing_Palabra("-u=");
             if(error) break;
             u = ing_palabra;
         }
         else if(comando_inicial.find("-path=") == 0){
-            error = i.Ing_Palabra("-path=");
+            error = i.Ing_PalabraC("-path=");
             if(error) break;
             path = ing_palabra;
         }
