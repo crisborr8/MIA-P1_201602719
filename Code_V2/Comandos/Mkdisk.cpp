@@ -62,8 +62,8 @@ void Mkdisk::Ejecutar(){
 }
 void Mkdisk::SetMBR(){
     mbr = MBR();
-    size *= 1000;
-    if(u == "m") size *= 1000;
+    size *= 1024;
+    if(u == "m") size *= 1024;
     mbr.size = size - sizeof(mbr);
     mbr.fit = f[0];
     mbr.date = chrono::system_clock::to_time_t(chrono::system_clock::now());

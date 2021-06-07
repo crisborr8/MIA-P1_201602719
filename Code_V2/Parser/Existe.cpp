@@ -21,17 +21,16 @@ bool Existe::Ex_Name(string name, string path){
         part = mbr.p[i_aux];
         if(part.status == 'A'){
             if(part.type == 'p'){
-                if(strcmp(part.name, name.c_str())) return true;
+                if(strcmp(part.name, name.c_str()) == 0) return true;
             }
             else{
                 archivo = fopen(path.c_str(), "rb");
                 f_start = part.start;
                 do{
-                    ebr = EBR();
                     fseek(archivo, f_start, SEEK_SET);
                     fread(&ebr, sizeof(ebr), 1, archivo);
                     if(ebr.status == 'A'){
-                        if(strcmp(ebr.name, name.c_str())){
+                        if(strcmp(ebr.name, name.c_str()) == 0){
                             fclose(archivo);
                             return true;
                         }

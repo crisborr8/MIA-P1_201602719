@@ -15,7 +15,7 @@ int size, add;
 string f, u, type, delet, path, name, id, fs, usr, pwd, grp, ugo, cont, dest, ruta;
 bool r, p;
 
-int f_start, f_size, f_next;
+int f_start, f_sizeMax;
 
 struct Files{
     int numero;
@@ -176,12 +176,13 @@ class Fdisk: public Comandos{
         bool Ingresar_Datos();
         bool Verificar_Datos();
         void Crear();
-        void Crear_();
-        void Crear_Bf();
-        void Crear_Wf();
-        void Crear_FF();
+        void Crear_Particion();
+        void Crear_VerEspacio();
         void Eliminar();
         void Agregar();
+        int Get_esp_dispPE(int start);
+        int Get_esp_dispL(int start);
+        void testing();
 
     public:
         void Inicializar();
