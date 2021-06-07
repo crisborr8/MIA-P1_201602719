@@ -39,6 +39,31 @@ bool Verificar::Ver_Usr(){
     cout << "ERROR!! -usr= debe existir" << endl;
     return false;
 }
+bool Verificar::Ver_Grp(){
+    if(e.trim(grp).length() > 0){
+        if(e.trim(grp).length() < 11) return true;
+        cout << "ERROR!! -grp= debe tener maximo 10 caracteres" << endl;
+    }
+    cout << "ERROR!! -grp= debe existir" << endl;
+    return false;
+}
+bool Verificar::Ver_Pwd(){
+    if(e.trim(pwd).length() > 0) return true;
+    cout << "ERROR!! -pwd= debe existir" << endl;
+    return false;
+}
+bool Verificar::Ver_Ugo(){
+    try{
+        ing_numero = stoi(ugo);
+    }catch(exception ex){
+        cout << "ERROR!!, -ugo debe ser tipo numerico" << endl;
+        return true;
+    }
+    if(ugo.length() == 3)
+    if(0 <= ing_numero && ing_numero <= 777) return true;
+    cout << "ERROR!! -ugo= debe de ser entre 000 y 777" << endl;
+    return false;
+}
 bool Verificar::Ver_Usr2(){
     if(Ver_Usr()){
         if(e.trim(usr).length() < 11) return true;
@@ -53,39 +78,9 @@ bool Verificar::Ver_Pwd2(){
     }
     return false;
 }
-bool Verificar::Ver_Grp(){
-    if(e.trim(grp).length() > 0){
-        if(e.trim(grp).length() < 11) return true;
-        cout << "ERROR!! -grp= debe tener maximo 10 caracteres" << endl;
-    }
-    cout << "ERROR!! -grp= debe existir" << endl;
-    return false;
-}
-bool Verificar::Ver_Pwd(){
-    if(e.trim(pwd).length() > 0) return true;
-    cout << "ERROR!! -pwd= debe existir" << endl;
-    return false;
-}
 bool Verificar::Ver_Size(){
     if(size > 0) return true;
     cout << "ERROR!! -size= debe de ser mayor a 0" << endl;
-    return false;
-}
-bool Verificar::Ver_Size2(){
-    if(size >= 0) return true;
-    cout << "ERROR!! -size= debe de ser mayor o igual a 0" << endl;
-    return false;
-}
-bool Verificar::Ver_Ugo(){
-    try{
-        ing_numero = stoi(ugo);
-    }catch(exception ex){
-        cout << "ERROR!!, -ugo debe ser tipo numerico" << endl;
-        return true;
-    }
-    if(ugo.length() == 3)
-    if(0 <= ing_numero && ing_numero <= 777) return true;
-    cout << "ERROR!! -ugo= debe de ser entre 000 y 777" << endl;
     return false;
 }
 bool Verificar::Ver_Name(){
@@ -105,35 +100,9 @@ bool Verificar::Ver_Path(){
     else cout << "ERROR!! -path= debe terminar en .dk" << endl;
     return false;
 }
-bool Verificar::Ver_Path4(){
-    i_aux = path.find_last_of(".");
-    if(i_aux > 0){
-        if(i_aux > 1){
-            if(e.slower(path.substr(i_aux, path.length())) == ".script") return true;
-            cout << "ERROR!! -path= debe terminar en .script" << endl;
-        }
-        else cout << "ERROR!! -path= debe ser una ruta valida" << endl;
-    }
-    else cout << "ERROR!! -path= debe terminar en .script" << endl;
-    return false;
-}
-bool Verificar::Ver_Path2(){
-    if(e.trim(path).length() < 1) return true;
-    cout << "ERROR!! -path= debe ser una ruta valida" << endl;
-    return false;
-}
 bool Verificar::Ver_Dest(){
     if(e.trim(dest).length() < 1) return true;
     cout << "ERROR!! -dest= debe ser una ruta valida" << endl;
-    return false;
-}
-bool Verificar::Ver_Path3(){
-    i_aux = path.find_last_of(".");
-    if(i_aux > 0){
-        if(i_aux > 1 && i_aux < path.length() - 1) return true;
-        else cout << "ERROR!! -path= debe ser una ruta valida" << endl;
-    }
-    else cout << "ERROR!! -path= debe tener alguna extencion" << endl;
     return false;
 }
 bool Verificar::Ver_Cont(){
@@ -162,5 +131,36 @@ bool Verificar::Ver_Delet(){
     delet = e.slower(delet);
     if(delet == "fast" || delet == "full") return true;
     cout << "ERROR!! -delet= debe ser fast o full" << endl;
+    return false;
+}
+bool Verificar::Ver_Size2(){
+    if(size >= 0) return true;
+    cout << "ERROR!! -size= debe de ser mayor o igual a 0" << endl;
+    return false;
+}
+bool Verificar::Ver_Path2(){
+    if(e.trim(path).length() < 1) return true;
+    cout << "ERROR!! -path= debe ser una ruta valida" << endl;
+    return false;
+}
+bool Verificar::Ver_Path3(){
+    i_aux = path.find_last_of(".");
+    if(i_aux > 0){
+        if(i_aux > 1 && i_aux < path.length() - 1) return true;
+        else cout << "ERROR!! -path= debe ser una ruta valida" << endl;
+    }
+    else cout << "ERROR!! -path= debe tener alguna extencion" << endl;
+    return false;
+}
+bool Verificar::Ver_Path4(){
+    i_aux = path.find_last_of(".");
+    if(i_aux > 0){
+        if(i_aux > 1){
+            if(e.slower(path.substr(i_aux, path.length())) == ".script") return true;
+            cout << "ERROR!! -path= debe terminar en .script" << endl;
+        }
+        else cout << "ERROR!! -path= debe ser una ruta valida" << endl;
+    }
+    else cout << "ERROR!! -path= debe terminar en .script" << endl;
     return false;
 }

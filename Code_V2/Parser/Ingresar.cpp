@@ -21,7 +21,18 @@ bool Ingresar::Ing_Comando(string c){
     comando = comando.substr(c.length(), comando.length());
     return false;
 }
-
+bool Ingresar::Ing_Palabra(string c){
+    if(c.length() + 1 >= comando.length()){
+        cout << "ERROR!!, " << c << " debe tener un parametro" << endl;
+        return true;
+    }
+    comando = comando.substr(c.length(), comando.length());
+    comando_inicial = comando.substr(0, comando.find_first_of(blanco) + 1);
+    ing_palabra = e.trim(comando_inicial);
+    comando = comando.substr(comando_inicial.length(), comando.length());
+    comando = e.trimL(comando);
+    return false;
+}
 bool Ingresar::Ing_PalabraC(string c){
     if(c.length() + 1 >= comando.length()){
         cout << "ERROR!!, " << c << " debe tener un parametro" << endl;
@@ -45,26 +56,12 @@ bool Ingresar::Ing_PalabraC(string c){
     }
     else{
         comando_inicial = comando.substr(0, comando.find_first_of(blanco) + 1);
-    ing_palabra = e.trim(comando_inicial);
+        ing_palabra = e.trim(comando_inicial);
         comando = comando.substr(comando_inicial.length(), comando.length());
     }
         comando = e.trimL(comando);
     return false;
 }
-
-bool Ingresar::Ing_Palabra(string c){
-    if(c.length() + 1 >= comando.length()){
-        cout << "ERROR!!, " << c << " debe tener un parametro" << endl;
-        return true;
-    }
-    comando = comando.substr(c.length(), comando.length());
-    comando_inicial = comando.substr(0, comando.find_first_of(blanco) + 1);
-    ing_palabra = e.trim(comando_inicial);
-    comando = comando.substr(comando_inicial.length(), comando.length());
-    comando = e.trimL(comando);
-    return false;
-}
-
 bool Ingresar::Ing_PalabraF(string c){
     comando = comando.substr(c.length(), comando.length());
     comando_inicial = comando.substr(0, comando.find_first_of('='));

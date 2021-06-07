@@ -33,6 +33,9 @@ bool Rmdisk::Verificar_Datos(){
 }
 
 void Rmdisk::Ejecutar(){
-    cout << "ejecutando rmdisk" << endl;
-    cout << "path: " << path << endl;
+    if(ex.Ex_Path_File(path)){
+        remove(path.c_str());
+        cout << "Removido con éxito" << endl;
+    }
+    else cout << "ERROR!! Archivo no existe" << endl;
 }

@@ -54,9 +54,39 @@ bool Mkdisk::Verificar_Datos(){
 }
 
 void Mkdisk::Ejecutar(){
-    cout << "ejecutando" << endl;
-    cout << "f: " << f << endl;
-    cout << "u: " << u << endl;
-    cout << "path: " << path << endl;
-    cout << "size: " << size << endl;
+    if(!ex.Ex_Path_File(path)){
+        SetMBR();
+        CrearDisco();
+    }
+    else cout << "ERROR!! Archivo ya existe" << endl;
+}
+void Mkdisk::SetMBR(){
+    mbr = MBR();
+    size *= 1000;
+    if(u == "m") size *= 1000;
+    mbr.size = size - sizeof(mbr);
+    mbr.fit = f[0];
+    mbr.date = chrono::system_clock::to_time_t(chrono::system_clock::now());
+    srand(time(NULL));
+    mbr.signature = rand();
+    part = Particion();
+    part.start = sizeof(mbr);
+    part.size = 0;
+    part.type = 'p';
+    part.status = 'N';
+    mbr.p[0] = mbr.p[1] = mbr.p[2] = mbr.p[3] = part;
+}
+void Mkdisk::CrearDisco(){
+    archivo = NULL;
+    archivo = fopen(path.c_str(), "w+b");
+    fseek(archivo, size, SEEK_SET);
+    fputc('\0', archivo);
+    fclose(archivo);
+
+    archivo = fopen(path.c_str(), "r+b");
+    fseek(archivo, 0, SEEK_SET);
+    fwrite(&mbr, sizeof(mbr), 1, archivo);
+    fclose(archivo);
+
+    cout << "Disco creado con exito!" << endl;
 }

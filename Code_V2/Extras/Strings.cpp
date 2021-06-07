@@ -22,13 +22,13 @@ string Strings::trimR(string s){
     return s;
 }
 
-string Strings::slower(string s){
-    for(int i = 0; i < s.length(); i++)
-        s[i] = clower(s[i]);
-    return s;
-}
 char Strings::clower(char c){
     if(c <='Z' && c >= 'A')
         return c - ('Z' - 'z');
     return c;
+}
+string Strings::slower(string s){
+    for(int i = 0; i < s.length(); i++)
+        s[i] = clower(s[i]);
+    return s;
 }

@@ -1,6 +1,9 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 #include "Extras/Strings.cpp"
+#include <ctime>
+#include <chrono>
+#include <fstream>
 
 string comando, comando_inicial;
 int ing_numero, i_aux;
@@ -11,6 +14,42 @@ int _case;
 int size, add;
 string f, u, type, delet, path, name, id, fs, usr, pwd, grp, ugo, cont, dest, ruta;
 bool r, p;
+
+int f_start, f_size, f_next;
+
+struct Files{
+    int numero;
+    string file;
+    Files* next;
+};
+struct Particion{
+    char status;
+    char type;
+    char fit;
+    int start;
+    int size;
+    char name[16];
+};
+struct EBR{
+    char status;
+    char fit;
+    int start;
+    int size;
+    int next;
+    char name[16];
+};
+struct MBR{
+    int size;
+    time_t date;
+    int signature;
+    char fit;
+    Particion p[4];
+};
+
+FILE *archivo;
+struct MBR mbr;
+struct EBR ebr;
+struct Particion part;
 
 class Menu{
     private:
@@ -28,24 +67,23 @@ class Verificar{
         bool Ver_Fs();
         bool Ver_Id();
         bool Ver_Add();
+        bool Ver_Grp();
+        bool Ver_Ugo();
         bool Ver_Usr();
         bool Ver_Pwd();
+        bool Ver_Usr2();
+        bool Ver_Pwd2();
+        bool Ver_Cont();
+        bool Ver_Dest();
         bool Ver_Name();
         bool Ver_Size();
         bool Ver_Path();
         bool Ver_Type();
         bool Ver_Type2();
         bool Ver_Delet();
-
-        bool Ver_Usr2();
-        bool Ver_Pwd2();
-        bool Ver_Grp();
-        bool Ver_Path2();
-        bool Ver_Ugo();
-        bool Ver_Path3();
         bool Ver_Size2();
-        bool Ver_Cont();
-        bool Ver_Dest();
+        bool Ver_Path2();
+        bool Ver_Path3();
         bool Ver_Path4();
 };
 class Ingresar{
@@ -59,16 +97,17 @@ class Ingresar{
         bool Ing_PalabraF(string c);
         bool Ing_Error();
 };
-
-struct Files{
-    int numero;
-    string file;
-    Files* next;
+class Existe{
+    public:
+        bool Ex_Path_File(string path);
+        bool Ex_Path_Folder(string path);
+        bool Ex_Name(string name, string path);
 };
 
 class Comandos{
     protected:
         bool error;
+        Existe ex;
         Ingresar i;
         Verificar v;
 };
@@ -136,6 +175,14 @@ class Fdisk: public Comandos{
         void Ejecutar();
         bool Ingresar_Datos();
         bool Verificar_Datos();
+        void Crear();
+        void Crear_();
+        void Crear_Bf();
+        void Crear_Wf();
+        void Crear_FF();
+        void Eliminar();
+        void Agregar();
+
     public:
         void Inicializar();
 };
@@ -176,6 +223,9 @@ class Mkdisk: public Comandos{
         void Ejecutar();
         bool Ingresar_Datos();
         bool Verificar_Datos();
+
+        void SetMBR();
+        void CrearDisco();
     public:
         void Inicializar();
 };
