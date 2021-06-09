@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Chmod::Inicializar(){
+void Chmod_::Inicializar(){
     error = false;
 
     path = "";
@@ -12,7 +12,7 @@ void Chmod::Inicializar(){
             Ejecutar();
 }
 
-bool Chmod::Ingresar_Datos(){
+bool Chmod_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -38,13 +38,13 @@ bool Chmod::Ingresar_Datos(){
     return error;
 }
 
-bool Chmod::Verificar_Datos(){
-    if(v.Ver_Path2())
-    if(v.Ver_Ugo())
-    return true;
-    return false;
+bool Chmod_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    if(!v.Ver_Ugo()) error = true;
+    return !error;
 }
 
-void Chmod::Ejecutar(){
+void Chmod_::Ejecutar(){
     
 }

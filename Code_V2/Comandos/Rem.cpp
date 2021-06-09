@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Rem::Inicializar(){
+void Rem_::Inicializar(){
     error = false;
 
     path = "";
@@ -10,7 +10,7 @@ void Rem::Inicializar(){
             Ejecutar();
 }
 
-bool Rem::Ingresar_Datos(){
+bool Rem_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -26,12 +26,12 @@ bool Rem::Ingresar_Datos(){
     return error;
 }
 
-bool Rem::Verificar_Datos(){
-    if(v.Ver_Path2())
-    return true;
-    return false;
+bool Rem_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    return !error;
 }
 
-void Rem::Ejecutar(){
+void Rem_::Ejecutar(){
     
 }

@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Rmusr::Inicializar(){
+void Rmusr_::Inicializar(){
     error = false;
 
     usr = "";
@@ -10,7 +10,7 @@ void Rmusr::Inicializar(){
             Ejecutar();
 }
 
-bool Rmusr::Ingresar_Datos(){
+bool Rmusr_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-usr=") == 0){
@@ -26,12 +26,12 @@ bool Rmusr::Ingresar_Datos(){
     return error;
 }
 
-bool Rmusr::Verificar_Datos(){
-    if(v.Ver_Usr())
-    return true;
-    return false;
+bool Rmusr_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Usr()) error = false;
+    return !error;
 }
 
-void Rmusr::Ejecutar(){
+void Rmusr_::Ejecutar(){
     
 }

@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Exec::Inicializar(){
+void Exec_::Inicializar(){
     error = false;
 
     path = "";
@@ -10,7 +10,7 @@ void Exec::Inicializar(){
             Ejecutar();
 }
 
-bool Exec::Ingresar_Datos(){
+bool Exec_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -26,12 +26,25 @@ bool Exec::Ingresar_Datos(){
     return error;
 }
 
-bool Exec::Verificar_Datos(){
-    if(v.Ver_Path4())
-    return true;
-    return false;
+bool Exec_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path4()) error = false;
+    return !error;
 }
 
-void Exec::Ejecutar(){
-    
+void Exec_::Ejecutar(){
+    if(ex.Ex_Path_File(path)){
+        comando = "";
+        ifstream file(path);
+        cout << "Inicia ejecucion del script" << endl;
+        while(getline(file, comando)){
+            cout << comando << endl;
+            getchar();
+            comando = comando.substr(0, comando.find_first_of('#'));
+            comando = e.trim(comando);
+            if (comando.length() > 0) me.Comando();
+        }
+        cout << "Finalizada ejecucion del script" << endl;
+    }
+    else cout << "ERROR!! archivo no existe" << endl;
 }

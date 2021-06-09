@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Chgrp::Inicializar(){
+void Chgrp_::Inicializar(){
     error = false;
 
     usr = "";
@@ -11,7 +11,7 @@ void Chgrp::Inicializar(){
             Ejecutar();
 }
 
-bool Chgrp::Ingresar_Datos(){
+bool Chgrp_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -32,13 +32,13 @@ bool Chgrp::Ingresar_Datos(){
     return error;
 }
 
-bool Chgrp::Verificar_Datos(){
-    if(v.Ver_Usr())
-    if(v.Ver_Grp())
-    return true;
-    return false;
+bool Chgrp_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Usr()) error = false;
+    if(!v.Ver_Grp()) error = true;
+    return !error;
 }
 
-void Chgrp::Ejecutar(){
+void Chgrp_::Ejecutar(){
     
 }

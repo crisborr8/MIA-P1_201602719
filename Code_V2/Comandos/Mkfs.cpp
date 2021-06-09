@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Mkfs::Inicializar(){
+void Mkfs_::Inicializar(){
     error = false;
 
     id = "";
@@ -12,7 +12,7 @@ void Mkfs::Inicializar(){
             Ejecutar();
 }
 
-bool Mkfs::Ingresar_Datos(){
+bool Mkfs_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-id=") == 0){
@@ -38,14 +38,14 @@ bool Mkfs::Ingresar_Datos(){
     return error;
 }
 
-bool Mkfs::Verificar_Datos(){
-    if(v.Ver_Id())
-    if(v.Ver_Fs())
-    if(v.Ver_Type2())
-    return true;
-    return false;
+bool Mkfs_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Id()) error = false;
+    if(!v.Ver_Fs()) error = true;
+    if(!v.Ver_Type2()) error = true;
+    return !error;
 }
 
-void Mkfs::Ejecutar(){
+void Mkfs_::Ejecutar(){
     
 }

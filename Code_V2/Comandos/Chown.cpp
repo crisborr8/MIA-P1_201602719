@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Chown::Inicializar(){
+void Chown_::Inicializar(){
     error = false;
 
     path = "";
@@ -12,7 +12,7 @@ void Chown::Inicializar(){
             Ejecutar();
 }
 
-bool Chown::Ingresar_Datos(){
+bool Chown_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -38,13 +38,13 @@ bool Chown::Ingresar_Datos(){
     return error;
 }
 
-bool Chown::Verificar_Datos(){
-    if(v.Ver_Path2())
-    if(v.Ver_Usr())
-    return true;
-    return false;
+bool Chown_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    if(!v.Ver_Usr()) error = true;
+    return !error;
 }
 
-void Chown::Ejecutar(){
+void Chown_::Ejecutar(){
     
 }

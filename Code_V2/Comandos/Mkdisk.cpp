@@ -1,6 +1,7 @@
 #include "../Headers.h"
+#include <sys/stat.h> 
 
-void Mkdisk::Inicializar(){
+void Mkdisk_::Inicializar(){
     error = false;
     
     path = "";
@@ -13,7 +14,7 @@ void Mkdisk::Inicializar(){
             Ejecutar();
 }
 
-bool Mkdisk::Ingresar_Datos(){
+bool Mkdisk_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-f=") == 0){
@@ -44,23 +45,24 @@ bool Mkdisk::Ingresar_Datos(){
     return error;
 }
 
-bool Mkdisk::Verificar_Datos(){
-    if(v.Ver_Size())
-    if(v.Ver_Path())
-    if(v.Ver_F())
-    if(v.Ver_U())
-    return true;
-    return false;
+bool Mkdisk_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Size()) error = false;
+    if(!v.Ver_Path()) error = true;
+    if(!v.Ver_F()) error = true;
+    if(!v.Ver_U()) error = true;
+    return !error;
 }
 
-void Mkdisk::Ejecutar(){
+void Mkdisk_::Ejecutar(){
     if(!ex.Ex_Path_File(path)){
+        mkdir(path.substr(0, path.find_last_of('/')).c_str(), 0777);
         SetMBR();
         CrearDisco();
     }
     else cout << "ERROR!! Archivo ya existe" << endl;
 }
-void Mkdisk::SetMBR(){
+void Mkdisk_::SetMBR(){
     mbr = MBR();
     size *= 1024;
     if(u == "m") size *= 1024;
@@ -76,7 +78,7 @@ void Mkdisk::SetMBR(){
     part.status = 'N';
     mbr.p[0] = mbr.p[1] = mbr.p[2] = mbr.p[3] = part;
 }
-void Mkdisk::CrearDisco(){
+void Mkdisk_::CrearDisco(){
     archivo = NULL;
     archivo = fopen(path.c_str(), "w+b");
     fseek(archivo, size, SEEK_SET);

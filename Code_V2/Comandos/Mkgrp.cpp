@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Mkgrp::Inicializar(){
+void Mkgrp_::Inicializar(){
     error = false;
 
     name = "";
@@ -10,7 +10,7 @@ void Mkgrp::Inicializar(){
             Ejecutar();
 }
 
-bool Mkgrp::Ingresar_Datos(){
+bool Mkgrp_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-name=") == 0){
@@ -26,12 +26,12 @@ bool Mkgrp::Ingresar_Datos(){
     return error;
 }
 
-bool Mkgrp::Verificar_Datos(){
-    if(v.Ver_Name())
-    return true;
-    return false;
+bool Mkgrp_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Name()) error = false;
+    return !error;
 }
 
-void Mkgrp::Ejecutar(){
+void Mkgrp_::Ejecutar(){
     
 }

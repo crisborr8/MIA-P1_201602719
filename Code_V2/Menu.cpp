@@ -1,6 +1,8 @@
 #include "Extras/Includes.cpp"
+#include <stdlib.h> 
 
-Menu::Menu(){
+void Menu::Menu_Principal(){
+    system("sudo chmod -R -f 777 /home/archivos");
     comando_inicial = "";
     while(comando_inicial!= "exit"){
         Mostrar_Menu();
@@ -31,38 +33,41 @@ void Menu::Comando(){
     comando = e.trimL(comando);
     if(comando.length() > 0) comando += " ";
 
-    if(comando_inicial == "cat") cat.Inicializar();
-    else if(comando_inicial == "chgrp") chgrp.Inicializar();
-    else if(comando_inicial == "chmod") chmod.Inicializar();
-    else if(comando_inicial == "chown") chown.Inicializar();
-    else if(comando_inicial == "cp") cp.Inicializar();
-    else if(comando_inicial == "edit") edit.Inicializar();
-    else if(comando_inicial == "exec") exec.Inicializar();
-    else if(comando_inicial == "fdisk") fdisk.Inicializar();
+    if(comando_inicial == "cat") cat_.Inicializar();
+    else if(comando_inicial == "chgrp") chgrp_.Inicializar();
+    else if(comando_inicial == "chmod") chmod_.Inicializar();
+    else if(comando_inicial == "chown") chown_.Inicializar();
+    else if(comando_inicial == "cp") cp_.Inicializar();
+    else if(comando_inicial == "edit") edit_.Inicializar();
+    else if(comando_inicial == "exec") exec_.Inicializar();
+    else if(comando_inicial == "fdisk") fdisk_.Inicializar();
     else if(comando_inicial == "find") find_.Inicializar();
-    else if(comando_inicial == "login") login.Inicializar();
-    else if(comando_inicial == "logut") logout.Inicializar();
-    else if(comando_inicial == "mkdir") mkdir.Inicializar();
-    else if(comando_inicial == "mkdisk") mkdisk.Inicializar();
-    else if(comando_inicial == "mkfile") mkfile.Inicializar();
-    else if(comando_inicial == "mkfs") mkfs.Inicializar();
-    else if(comando_inicial == "mkgrp") mkgrp.Inicializar();
-    else if(comando_inicial == "mkusr") mkusr.Inicializar();
-    else if(comando_inicial == "mount") mount.Inicializar();
-    else if(comando_inicial == "mv") mv.Inicializar();
-    else if(comando_inicial == "pause") pause.Inicializar();
-    else if(comando_inicial == "rem") rem.Inicializar();
-    else if(comando_inicial == "ren") ren.Inicializar();
-    else if(comando_inicial == "rep") rep.Inicializar();
-    else if(comando_inicial == "rmdisk") rmdisk.Inicializar();
-    else if(comando_inicial == "rmgrp") rmgrp.Inicializar();
-    else if(comando_inicial == "rmusr") rmusr.Inicializar();
-    else if(comando_inicial == "unmount") unmount.Inicializar();
+    else if(comando_inicial == "login") login_.Inicializar();
+    else if(comando_inicial == "logut") logout_.Inicializar();
+    else if(comando_inicial == "mkdir") mkdir_.Inicializar();
+    else if(comando_inicial == "mkdisk") mkdisk_.Inicializar();
+    else if(comando_inicial == "mkfile") mkfile_.Inicializar();
+    else if(comando_inicial == "mkfs") mkfs_.Inicializar();
+    else if(comando_inicial == "mkgrp") mkgrp_.Inicializar();
+    else if(comando_inicial == "mkusr") mkusr_.Inicializar();
+    else if(comando_inicial == "mount") mount_.Inicializar();
+    else if(comando_inicial == "mv") mv_.Inicializar();
+    else if(comando_inicial == "pause") pause_.Inicializar();
+    else if(comando_inicial == "rem") rem_.Inicializar();
+    else if(comando_inicial == "ren") ren_.Inicializar();
+    else if(comando_inicial == "rep") rep_.Inicializar();
+    else if(comando_inicial == "rmdisk") rmdisk_.Inicializar();
+    else if(comando_inicial == "rmgrp") rmgrp_.Inicializar();
+    else if(comando_inicial == "rmusr") rmusr_.Inicializar();
+    else if(comando_inicial == "unmount") unmount_.Inicializar();
     else if(comando_inicial != "exit")
         cout << "ERROR!! INGRESE UN COMANDO VALIDO" << endl;
 }
 
 int main()
 {
-    Menu();
+    Menu m;
+    m.Menu_Principal();
 }
+
+//exec -path="/home/criss/Escritorio/Criss/MIA_P1_201602719/Tests/basico.script"

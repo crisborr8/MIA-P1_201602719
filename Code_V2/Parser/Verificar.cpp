@@ -30,7 +30,7 @@ bool Verificar::Ver_Fs(){
     return false;
 }
 bool Verificar::Ver_Add(){
-    if(size != 0) return true;
+    if(add != 0) return true;
     cout << "ERROR!! -add= debe de ser distinto a 0" << endl;
     return false;
 }
@@ -139,7 +139,7 @@ bool Verificar::Ver_Size2(){
     return false;
 }
 bool Verificar::Ver_Path2(){
-    if(e.trim(path).length() < 1) return true;
+    if(e.trim(path).length() > 1) return true;
     cout << "ERROR!! -path= debe ser una ruta valida" << endl;
     return false;
 }

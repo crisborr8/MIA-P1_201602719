@@ -45,6 +45,9 @@ struct MBR{
     char fit;
     Particion p[4];
 };
+struct Monunts{
+
+};
 
 FILE *archivo;
 struct MBR mbr;
@@ -54,10 +57,10 @@ struct Particion part;
 class Menu{
     private:
         void Mostrar_Menu();
-        void Comando();
     public:
-        Menu();
-};
+        void Comando();
+        void Menu_Principal();
+}me;
 
 class Verificar{
     public:
@@ -112,7 +115,7 @@ class Comandos{
         Verificar v;
 };
 
-class Cat: public Comandos{
+class Cat_: public Comandos{
     private:
         Files *file_n;
         void Ejecutar();
@@ -122,7 +125,7 @@ class Cat: public Comandos{
     public:
         void Inicializar();
 };
-class Chgrp: public Comandos{
+class Chgrp_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -130,7 +133,7 @@ class Chgrp: public Comandos{
     public:
         void Inicializar();
 };
-class Chmod: public Comandos{
+class Chmod_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -138,7 +141,7 @@ class Chmod: public Comandos{
     public:
         void Inicializar();
 };
-class Chown: public Comandos{
+class Chown_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -146,7 +149,7 @@ class Chown: public Comandos{
     public:
         void Inicializar();
 };
-class Cp: public Comandos{
+class Cp_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -154,7 +157,7 @@ class Cp: public Comandos{
     public:
         void Inicializar();
 };
-class Edit: public Comandos{
+class Edit_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -162,7 +165,7 @@ class Edit: public Comandos{
     public:
         void Inicializar();
 };
-class Exec: public Comandos{
+class Exec_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -170,7 +173,7 @@ class Exec: public Comandos{
     public:
         void Inicializar();
 };
-class Fdisk: public Comandos{
+class Fdisk_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -182,12 +185,13 @@ class Fdisk: public Comandos{
         void Agregar();
         int Get_esp_dispPE(int start);
         int Get_esp_dispL(int start);
+        void Ordernar_MBR();
         void testing();
 
     public:
         void Inicializar();
 };
-class Find: public Comandos{
+class Find_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -195,7 +199,7 @@ class Find: public Comandos{
     public:
         void Inicializar();
 };
-class Login: public Comandos{
+class Login_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -203,7 +207,7 @@ class Login: public Comandos{
     public:
         void Inicializar();
 };
-class Logout: public Comandos{
+class Logout_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -211,7 +215,7 @@ class Logout: public Comandos{
     public:
         void Inicializar();
 };
-class Mkdir: public Comandos{
+class Mkdir_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -219,7 +223,7 @@ class Mkdir: public Comandos{
     public:
         void Inicializar();
 };
-class Mkdisk: public Comandos{
+class Mkdisk_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -230,7 +234,7 @@ class Mkdisk: public Comandos{
     public:
         void Inicializar();
 };
-class Mkfile: public Comandos{
+class Mkfile_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -238,7 +242,7 @@ class Mkfile: public Comandos{
     public:
         void Inicializar();
 };
-class Mkfs: public Comandos{
+class Mkfs_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -246,7 +250,7 @@ class Mkfs: public Comandos{
     public:
         void Inicializar();
 };
-class Mkgrp: public Comandos{
+class Mkgrp_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -254,7 +258,7 @@ class Mkgrp: public Comandos{
     public:
         void Inicializar();
 };
-class Mkusr: public Comandos{
+class Mkusr_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -262,7 +266,7 @@ class Mkusr: public Comandos{
     public:
         void Inicializar();
 };
-class Mount: public Comandos{
+class Mount_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -270,7 +274,7 @@ class Mount: public Comandos{
     public:
         void Inicializar();
 };
-class Mv: public Comandos{
+class Mv_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -278,7 +282,7 @@ class Mv: public Comandos{
     public:
         void Inicializar();
 };
-class Pause: public Comandos{
+class Pause_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -286,7 +290,7 @@ class Pause: public Comandos{
     public:
         void Inicializar();
 };
-class Rem: public Comandos{
+class Rem_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -294,7 +298,7 @@ class Rem: public Comandos{
     public:
         void Inicializar();
 };
-class Ren: public Comandos{
+class Ren_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -302,7 +306,7 @@ class Ren: public Comandos{
     public:
         void Inicializar();
 };
-class Rep: public Comandos{
+class Rep_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -310,7 +314,7 @@ class Rep: public Comandos{
     public:
         void Inicializar();
 };
-class Rmdisk: public Comandos{
+class Rmdisk_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -318,7 +322,7 @@ class Rmdisk: public Comandos{
     public:
         void Inicializar();
 };
-class Rmgrp: public Comandos{
+class Rmgrp_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -326,7 +330,7 @@ class Rmgrp: public Comandos{
     public:
         void Inicializar();
 };
-class Rmusr: public Comandos{
+class Rmusr_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();
@@ -334,7 +338,7 @@ class Rmusr: public Comandos{
     public:
         void Inicializar();
 };
-class Unmount: public Comandos{
+class Unmount_: public Comandos{
     private:
         void Ejecutar();
         bool Ingresar_Datos();

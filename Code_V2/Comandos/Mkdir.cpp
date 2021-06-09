@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Mkdir::Inicializar(){
+void Mkdir_::Inicializar(){
     error = false;
 
     path = "";
@@ -11,7 +11,7 @@ void Mkdir::Inicializar(){
             Ejecutar();
 }
 
-bool Mkdir::Ingresar_Datos(){
+bool Mkdir_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -32,12 +32,12 @@ bool Mkdir::Ingresar_Datos(){
     return error;
 }
 
-bool Mkdir::Verificar_Datos(){
-    if(v.Ver_Path2())
-    return true;
-    return false;
+bool Mkdir_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    return !error;
 }
 
-void Mkdir::Ejecutar(){
+void Mkdir_::Ejecutar(){
     
 }

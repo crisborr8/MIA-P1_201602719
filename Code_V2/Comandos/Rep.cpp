@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Rep::Inicializar(){
+void Rep_::Inicializar(){
     error = false;
 
     name = "";
@@ -13,7 +13,7 @@ void Rep::Inicializar(){
             Ejecutar();
 }
 
-bool Rep::Ingresar_Datos(){
+bool Rep_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -41,14 +41,14 @@ bool Rep::Ingresar_Datos(){
     return error;
 }
 
-bool Rep::Verificar_Datos(){
-    if(v.Ver_Path2())
-    if(v.Ver_Id())
-    if(v.Ver_Name())
-    return true;
-    return false;
+bool Rep_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    if(!v.Ver_Id()) error = true;
+    if(!v.Ver_Name()) error = true;
+    return !error;
 }
 
-void Rep::Ejecutar(){
+void Rep_::Ejecutar(){
     
 }

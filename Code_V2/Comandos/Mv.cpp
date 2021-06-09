@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Mv::Inicializar(){
+void Mv_::Inicializar(){
     error = false;
 
     path = "";
@@ -11,7 +11,7 @@ void Mv::Inicializar(){
             Ejecutar();
 }
 
-bool Mv::Ingresar_Datos(){
+bool Mv_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -31,13 +31,13 @@ bool Mv::Ingresar_Datos(){
     return error;
 }
 
-bool Mv::Verificar_Datos(){
-    if(v.Ver_Path2())
-    if(v.Ver_Dest())
-    return true;
-    return false;
+bool Mv_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    if(!v.Ver_Dest()) error = true;
+    return !error;
 }
 
-void Mv::Ejecutar(){
+void Mv_::Ejecutar(){
     
 }

@@ -1,11 +1,11 @@
 #include "../Headers.h"
 
-void Logout::Inicializar(){
+void Logout_::Inicializar(){
     if(!Ingresar_Datos()) 
         Ejecutar();
 }
 
-bool Logout::Ingresar_Datos(){
+bool Logout_::Ingresar_Datos(){
     if (e.trim(comando).length() > 0){
         cout << "ERROR!! este comando no recibe parametros" << endl;
         return true;
@@ -13,6 +13,6 @@ bool Logout::Ingresar_Datos(){
     return false;
 }
 
-void Logout::Ejecutar(){
+void Logout_::Ejecutar(){
     
 }

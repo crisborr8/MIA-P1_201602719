@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Mkfile::Inicializar(){
+void Mkfile_::Inicializar(){
     error = false;
 
     path = "";
@@ -13,7 +13,7 @@ void Mkfile::Inicializar(){
             Ejecutar();
 }
 
-bool Mkfile::Ingresar_Datos(){
+bool Mkfile_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -44,14 +44,14 @@ bool Mkfile::Ingresar_Datos(){
     return error;
 }
 
-bool Mkfile::Verificar_Datos(){
-    if(v.Ver_Path3())
-    if(v.Ver_Size2())
-    if(v.Ver_Cont())
-    return true;
-    return false;
+bool Mkfile_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path3()) error = false;
+    if(!v.Ver_Size2()) error = true;
+    if(!v.Ver_Cont()) error = true;
+    return !error;
 }
 
-void Mkfile::Ejecutar(){
+void Mkfile_::Ejecutar(){
     
 }

@@ -20,10 +20,10 @@ bool Existe::Ex_Name(string name, string path){
     for(i_aux = 0; i_aux < 4; i_aux++){
         part = mbr.p[i_aux];
         if(part.status == 'A'){
-            if(part.type == 'p'){
+            if(part.type != 'l'){
                 if(strcmp(part.name, name.c_str()) == 0) return true;
             }
-            else{
+            if(part.type == 'e'){
                 archivo = fopen(path.c_str(), "rb");
                 f_start = part.start;
                 do{
@@ -32,6 +32,7 @@ bool Existe::Ex_Name(string name, string path){
                     if(ebr.status == 'A'){
                         if(strcmp(ebr.name, name.c_str()) == 0){
                             fclose(archivo);
+                            type = "l";
                             return true;
                         }
                     }

@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Rmgrp::Inicializar(){
+void Rmgrp_::Inicializar(){
     error = false;
 
     name = "";
@@ -10,7 +10,7 @@ void Rmgrp::Inicializar(){
             Ejecutar();
 }
 
-bool Rmgrp::Ingresar_Datos(){
+bool Rmgrp_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-name=") == 0){
@@ -26,12 +26,12 @@ bool Rmgrp::Ingresar_Datos(){
     return error;
 }
 
-bool Rmgrp::Verificar_Datos(){
-    if(v.Ver_Name())
-    return true;
-    return false;
+bool Rmgrp_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Name()) error = false;
+    return !error;
 }
 
-void Rmgrp::Ejecutar(){
+void Rmgrp_::Ejecutar(){
     
 }

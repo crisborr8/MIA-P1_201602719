@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Mount::Inicializar(){
+void Mount_::Inicializar(){
     error = false;
 
     path = "";
@@ -11,7 +11,7 @@ void Mount::Inicializar(){
             Ejecutar();
 }
 
-bool Mount::Ingresar_Datos(){
+bool Mount_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-name=") == 0){
@@ -32,13 +32,13 @@ bool Mount::Ingresar_Datos(){
     return error;
 }
 
-bool Mount::Verificar_Datos(){
-    if(v.Ver_Path())
-    if(v.Ver_Name())
-    return true;
-    return false;
+bool Mount_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path()) error = false;
+    if(!v.Ver_Name()) error = true;
+    return !error;
 }
 
-void Mount::Ejecutar(){
+void Mount_::Ejecutar(){
     
 }

@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Mkusr::Inicializar(){
+void Mkusr_::Inicializar(){
     error = false;
 
     usr = "";
@@ -12,7 +12,7 @@ void Mkusr::Inicializar(){
             Ejecutar();
 }
 
-bool Mkusr::Ingresar_Datos(){
+bool Mkusr_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-usr=") == 0){
@@ -38,14 +38,14 @@ bool Mkusr::Ingresar_Datos(){
     return error;
 }
 
-bool Mkusr::Verificar_Datos(){
-    if(v.Ver_Usr2())
-    if(v.Ver_Pwd2())
-    if(v.Ver_Grp())
-    return true;
-    return false;
+bool Mkusr_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Usr2()) error = false;
+    if(!v.Ver_Pwd2()) error = true;
+    if(!v.Ver_Grp()) error = true;
+    return !error;
 }
 
-void Mkusr::Ejecutar(){
+void Mkusr_::Ejecutar(){
     
 }

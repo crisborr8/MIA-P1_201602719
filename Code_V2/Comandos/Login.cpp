@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Login::Inicializar(){
+void Login_::Inicializar(){
     error = false;
 
     usr = "";
@@ -12,7 +12,7 @@ void Login::Inicializar(){
             Ejecutar();
 }
 
-bool Login::Ingresar_Datos(){
+bool Login_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-usr=") == 0){
@@ -38,14 +38,14 @@ bool Login::Ingresar_Datos(){
     return error;
 }
 
-bool Login::Verificar_Datos(){
-    if(v.Ver_Usr())
-    if(v.Ver_Pwd())
-    if(v.Ver_Id())
-    return true;
-    return false;
+bool Login_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Usr()) error = false;
+    if(!v.Ver_Pwd()) error = true;
+    if(!v.Ver_Id()) error = true;
+    return !error;
 }
 
-void Login::Ejecutar(){
+void Login_::Ejecutar(){
     
 }

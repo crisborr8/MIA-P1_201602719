@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Find::Inicializar(){
+void Find_::Inicializar(){
     error = false;
 
     path = "";
@@ -11,7 +11,7 @@ void Find::Inicializar(){
             Ejecutar();
 }
 
-bool Find::Ingresar_Datos(){
+bool Find_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -31,13 +31,13 @@ bool Find::Ingresar_Datos(){
     return error;
 }
 
-bool Find::Verificar_Datos(){
-    if(v.Ver_Path2())
-    if(v.Ver_Name())
-    return true;
-    return false;
+bool Find_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    if(!v.Ver_Name()) error = true;
+    return !error;
 }
 
-void Find::Ejecutar(){
+void Find_::Ejecutar(){
     
 }

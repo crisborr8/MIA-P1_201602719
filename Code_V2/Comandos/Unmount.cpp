@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Unmount::Inicializar(){
+void Unmount_::Inicializar(){
     error = false;
 
     id = "";
@@ -10,7 +10,7 @@ void Unmount::Inicializar(){
             Ejecutar();
 }
 
-bool Unmount::Ingresar_Datos(){
+bool Unmount_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-id=") == 0){
@@ -26,12 +26,12 @@ bool Unmount::Ingresar_Datos(){
     return error;
 }
 
-bool Unmount::Verificar_Datos(){
-    if(v.Ver_Id())
-    return true;
-    return false;
+bool Unmount_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Id()) error = false;
+    return !error;
 }
 
-void Unmount::Ejecutar(){
+void Unmount_::Ejecutar(){
     
 }

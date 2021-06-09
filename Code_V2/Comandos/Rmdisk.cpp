@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Rmdisk::Inicializar(){
+void Rmdisk_::Inicializar(){
     error = false;
     
     path = "";
@@ -10,7 +10,7 @@ void Rmdisk::Inicializar(){
             Ejecutar();
 }
 
-bool Rmdisk::Ingresar_Datos(){
+bool Rmdisk_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -26,13 +26,13 @@ bool Rmdisk::Ingresar_Datos(){
     return error;
 }
 
-bool Rmdisk::Verificar_Datos(){
-    if(v.Ver_Path())
-    return true;
-    return false;
+bool Rmdisk_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path()) error = false;
+    return !error;
 }
 
-void Rmdisk::Ejecutar(){
+void Rmdisk_::Ejecutar(){
     if(ex.Ex_Path_File(path)){
         remove(path.c_str());
         cout << "Removido con éxito" << endl;

@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Ren::Inicializar(){
+void Ren_::Inicializar(){
     error = false;
 
     path = "";
@@ -11,7 +11,7 @@ void Ren::Inicializar(){
             Ejecutar();
 }
 
-bool Ren::Ingresar_Datos(){
+bool Ren_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -30,13 +30,13 @@ bool Ren::Ingresar_Datos(){
     return error;
 }
 
-bool Ren::Verificar_Datos(){
-    if(v.Ver_Path2())
-    if(v.Ver_Name())
-    return true;
-    return false;
+bool Ren_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Path2()) error = false;
+    if(!v.Ver_Name()) error = true;
+    return !error;
 }
 
-void Ren::Ejecutar(){
+void Ren_::Ejecutar(){
     
 }

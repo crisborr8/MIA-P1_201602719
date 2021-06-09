@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Fdisk::Inicializar(){
+void Fdisk_::Inicializar(){
     error = false;
 
     _case = 0; //0 - Crear particion, 1 Eliminar, 2 Agregar
@@ -18,7 +18,7 @@ void Fdisk::Inicializar(){
             Ejecutar();
 }
 
-bool Fdisk::Ingresar_Datos(){
+bool Fdisk_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-size=") == 0){
@@ -70,31 +70,33 @@ bool Fdisk::Ingresar_Datos(){
     }
     return error;
 }
-bool Fdisk::Verificar_Datos(){
-    if(v.Ver_F())
-    if(v.Ver_U2())
-    if(v.Ver_Type())
-    if(v.Ver_Name())
-    if(v.Ver_Path()){
-        if(_case == 0) if(v.Ver_Size()) return true;
-        else if(_case == 1) if(v.Ver_Delet()) return true;
-        else if(v.Ver_Add()) return true;
+bool Fdisk_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_F()) error = false;
+    if(!v.Ver_U2()) error = true;
+    if(!v.Ver_Type()) error = true;
+    if(!v.Ver_Name()) error = true;
+    if(!v.Ver_Path()){
+        if(_case == 0){ if(!v.Ver_Size()) error = true; }
+        else if(_case == 1){ if(!v.Ver_Delet()) error = true; }
+        else if(!v.Ver_Add()) error = true;
     }
-    return false;
+    return !error;
 }
-void Fdisk::Ejecutar(){
+void Fdisk_::Ejecutar(){
     if(ex.Ex_Path_File(path)){
         switch (_case)
         {
         case 0: Crear(); break;
-        case 1: Eliminar(); break;
+        case 1:testing(); Eliminar(); break;
         case 2: Agregar(); break;
         }
+        testing();
     }
     else cout << "ERROR!! el archivo no existe" << endl;
 }
 
-void Fdisk::Crear(){
+void Fdisk_::Crear(){
     if(!ex.Ex_Name(name, path)){
         archivo = fopen(path.c_str(), "rb");
         mbr = MBR();
@@ -106,15 +108,16 @@ void Fdisk::Crear(){
             part = mbr.p[i];
             if(part.type == 'e'){
                 if(part.status == 'A'){
+                    if(type == "l") break;
                     if(type == "e"){
                         i_aux = 5;
                         break;
                     }
                     else i_aux++;
                 }
-                if(type == "l") break;
             }
             else if (part.status == 'A') i_aux++;
+            if(i == 3 && type == "l") i_aux = 6;
         }
         if(i_aux == 4 && type == "l") i_aux = 6;
         switch (i_aux)
@@ -130,13 +133,12 @@ void Fdisk::Crear(){
                 break;
             default:
                 Crear_Particion();
-                testing();
                 break;
         }
     }
     else cout << "ERROR!! el nombre ya existe en esta particion" << endl;
 }
-void Fdisk::Crear_Particion(){
+void Fdisk_::Crear_Particion(){
     if(u != "b") size *= 1024;
     if(u == "m") size *= 1024;
 
@@ -181,28 +183,7 @@ void Fdisk::Crear_Particion(){
             part.type = type[0];
             mbr.p[3] = part;
 
-            for(int i = 0; i < 4; i++){
-                if(mbr.p[i].status == 'N'){
-                    for(int j = i + 1; j < 4; j++){
-                        part = mbr.p[i];
-                        mbr.p[i] = mbr.p[j];
-                        mbr.p[j] = part;
-                    }
-                }
-            }
-            for(int i = 0; i < 4; i++){
-                if(mbr.p[i].status == 'A'){
-                    for(int j = i + 1; j < 4; j++){
-                        if(mbr.p[j].status == 'N') break;
-                        if(mbr.p[j].start < mbr.p[i].start){
-                            part = mbr.p[i];
-                            mbr.p[i] = mbr.p[j];
-                            mbr.p[j] = part;
-                        }
-                    }
-                }
-                else break;
-            }
+            Ordernar_MBR();
 
             archivo = fopen(path.c_str(), "r+b");
             fseek(archivo, 0, SEEK_SET);
@@ -222,7 +203,7 @@ void Fdisk::Crear_Particion(){
     }
     else cout << "ERROR!! espacio insuficiente" << endl;
 }
-void Fdisk::Crear_VerEspacio(){
+void Fdisk_::Crear_VerEspacio(){
     int esp_disp, esp_dispAnt;
     if(mbr.fit == 'b') esp_dispAnt = mbr.size;
     else esp_dispAnt = 0;
@@ -240,15 +221,15 @@ void Fdisk::Crear_VerEspacio(){
                     ebr = EBR();
                     fseek(archivo, f_start, SEEK_SET);
                     fread(&ebr, sizeof(ebr), 1, archivo);
-                    esp_disp = Get_esp_dispL(f_start) - (f_start + sizeof(ebr));
+                    esp_disp = Get_esp_dispL(f_start) - sizeof(ebr);
 
                     if(mbr.fit == 'b'){
-                        if(esp_disp < esp_dispAnt){ 
+                        if(esp_disp < esp_dispAnt && esp_disp >= size){ 
                             esp_dispAnt = esp_disp;
                             i_aux = f_start;
                         }
                     }
-                    else if(esp_disp > esp_dispAnt){ 
+                    else if(esp_disp > esp_dispAnt && esp_disp >= size){ 
                         esp_dispAnt = esp_disp;
                         i_aux = f_start;
                         if(mbr.fit == 'f') break;
@@ -270,11 +251,11 @@ void Fdisk::Crear_VerEspacio(){
                 esp_disp = Get_esp_dispPE(f_start);
 
                 if(mbr.fit == 'b'){
-                    if(esp_disp < esp_dispAnt){
+                    if(esp_disp < esp_dispAnt && esp_disp >= size){
                         esp_dispAnt = esp_disp;
                         i_aux = f_start;
                     }
-                } else if(esp_disp > esp_dispAnt){
+                } else if(esp_disp > esp_dispAnt && esp_disp >= size){
                     esp_dispAnt = esp_disp;
                     i_aux = f_start;
                     if(mbr.fit == 'f') break;
@@ -286,21 +267,168 @@ void Fdisk::Crear_VerEspacio(){
     f_start = i_aux;
 }
 
-void Fdisk::Eliminar(){
+void Fdisk_::Eliminar(){
     if(ex.Ex_Name(name, path)){
+        cout << "¿Desea eliminar la particion " << name << " del disco?" << endl;
+        cout << "si/no" << endl;
+        comando = "";
+        getline(cin, comando);
+        if(e.slower(e.trim(comando)) == "si"){
+            archivo = fopen(path.c_str(), "r+b");
+            fseek(archivo, 0, SEEK_SET);
+            fread(&mbr, sizeof(mbr), 1, archivo);
 
+            if(type == "l"){
+                for(int i = 0; i < 4; i++){
+                    if(mbr.p[i].type == 'e'){
+                        f_start = mbr.p[i].start;
+                        i_aux = f_start;
+                        do{
+                            fseek(archivo, f_start, SEEK_SET);
+                            fread(&ebr, sizeof(ebr), 1, archivo);
+                            if(strcmp(ebr.name, name.c_str()) == 0){
+                                ebr.status = 'N';
+                                strcpy(ebr.name, "");
+                                if(i_aux != f_start){ //No es el primero
+                                    EBR ebr_aux = EBR();
+                                    fseek(archivo, i_aux, SEEK_SET);
+                                    fread(&ebr_aux, sizeof(ebr_aux), 1, archivo);
+                                    ebr_aux.next = ebr.next;
+                                    fseek(archivo, i_aux, SEEK_SET);
+                                    fwrite(&ebr_aux, sizeof(ebr_aux), 1, archivo);
+                                }
+                                if(delet == "full"){
+                                    fseek(archivo, ebr.start, SEEK_SET);
+                                    fwrite("0", 1, ebr.size, archivo);
+                                }
+                                fseek(archivo, f_start, SEEK_SET);
+                                fwrite(&ebr, sizeof(ebr), 1, archivo);
+                                break;
+                            }
+                            i_aux = f_start;
+                            f_start = ebr.next;
+                        }while(ebr.next != -1);
+                        break;
+                    }
+                }
+            }
+            else{
+                for(int i = 0; i < 4; i++){
+                    if(strcmp(mbr.p[i].name, name.c_str())  == 0){
+                        cout << "---->Start: " << mbr.p[i].start << endl;
+                        mbr.p[i].status = 'N';
+                        mbr.p[i].type = 'p';
+                        strcpy(mbr.p[i].name, "");
+                        if(delet == "full") {
+                            fseek(archivo, mbr.p[i].start, SEEK_SET);
+                            fwrite("0", 1, mbr.p[i].size, archivo);
+                        }
+                        Ordernar_MBR();
+                        fseek(archivo, 0, SEEK_SET);
+                        fwrite(&mbr, sizeof(mbr), 1, archivo);
+                        break;
+                    }
+                }
+            }
+            fclose(archivo);
+            cout << "Particion eliminada" << endl;
+        }
+        else cout << "...Redireccionando al menu" << endl;
     }
     else cout << "ERROR!! el nombre no existe en esta particion" << endl;
 }
 
-void Fdisk::Agregar(){
+void Fdisk_::Agregar(){
     if(ex.Ex_Name(name, path)){
+        if(u != "b") add *= 1024;
+        if(u == "m") add *= 1024;
+        archivo = fopen(path.c_str(), "r+b");
+        fseek(archivo, 0, SEEK_SET);
+        fread(&mbr, sizeof(mbr), 1, archivo);
 
+        if(type == "l"){
+            for(int i = 0; i < 4; i++){
+                if(mbr.p[i].type == 'e'){
+                    f_start = mbr.p[i].start;
+                    do{
+                        fseek(archivo, f_start, SEEK_SET);
+                        fread(&ebr, sizeof(ebr), 1, archivo);
+                        if(ebr.status == 'A'){
+                            if(strcmp(ebr.name, name.c_str()) == 0){
+                                if(add > 0){
+                                    i_aux = Get_esp_dispL(f_start + 1) + 1;
+                                    if(i_aux > add) cout << "ERROR!! Espacio insuficiente" << endl;
+                                    else ebr.size += add;
+                                }
+                                else{
+                                    i_aux = ebr.size;
+                                    if(i_aux + add < 0) cout << "ERROR!! Espacio a quitar demasiado grande" << endl;
+                                    else ebr.size += add;
+                                }
+                                fseek(archivo, f_start, SEEK_SET);
+                                fwrite(&ebr, sizeof(ebr), 1, archivo);
+                                break;
+                            }
+                        }
+                        f_start = ebr.next;
+                    }while(ebr.next != -1);
+                    break;
+                }
+            }
+        }
+        else{
+            for(int i = 0; i < 4; i++){
+                if(strcmp(mbr.p[i].name, name.c_str()) == 0){
+                    part = mbr.p[i];
+                    if(add > 0){
+                        i_aux = Get_esp_dispPE(part.start + 1) + 1;
+                        if(i_aux >= add){
+                            mbr.p[i].size += add;
+                            fseek(archivo, 0, SEEK_SET);
+                            fwrite(&mbr, sizeof(mbr), 1, archivo);
+                            cout << "Espacio agregado" << endl;
+                        }
+                        else cout << "ERROR!! espacio insuficiente" << endl;
+                    }
+                    else{
+                        if(part.type == 'p'){
+                            i_aux = part.size;
+                            if(i_aux + add < 0) cout << "ERROR!! Espacio a quitar demasiado grande" << endl;
+                            else {
+                                mbr.p[i].size += add;
+                                fseek(archivo, 0, SEEK_SET);
+                                fwrite(&mbr, sizeof(mbr), 1, archivo);
+                                cout << "Espacio agregado" << endl;
+                            }
+                        }
+                        else{
+                            f_start = part.start;
+                            do{
+                                fseek(archivo, f_start, SEEK_SET);
+                                fread(&ebr, sizeof(ebr), 1, archivo);
+                                f_start = ebr.next;
+                            }while(ebr.next != -1);
+                            i_aux = part.start + part.size - ebr.start;
+                            if(ebr.status == 'A') i_aux -= ebr.size;
+                            if(i_aux + add < 0) cout << "ERROR!! Espacio a quitar demasiado grande" << endl;
+                            else {
+                                mbr.p[i].size += add;
+                                fseek(archivo, 0, SEEK_SET);
+                                fwrite(&mbr, sizeof(mbr), 1, archivo);
+                                cout << "Espacio agregado" << endl;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        fclose(archivo);
     }
     else cout << "ERROR!! el nombre no existe en esta particion" << endl;
 }
 
-void Fdisk::testing(){
+void Fdisk_::testing(){
 
     archivo = fopen(path.c_str(), "rb");
     fseek(archivo, 0, SEEK_SET);
@@ -318,7 +446,7 @@ void Fdisk::testing(){
         cout << "\tFit: " << part.fit << endl;
         cout << "\tStart: " << part.start << endl; 
         cout << "\tSize: " << part.size << endl;
-        if(part.type == 'e'){
+        if(part.type == 'e' && part.status == 'A'){
             f_start = part.start;
             i_aux = 1;
             do{
@@ -330,6 +458,7 @@ void Fdisk::testing(){
                 cout << "\t\tFit: " << ebr.fit << endl;
                 cout << "\t\tStart: " << ebr.start << endl;
                 cout << "\t\tSize: " << ebr.size << endl;
+                cout << "\t\tNext: " << ebr.next << endl;
                 f_start = ebr.next;
                 i_aux++;
             }while(ebr.next != -1);
@@ -339,18 +468,18 @@ void Fdisk::testing(){
     fclose(archivo);
 
 }
-int Fdisk::Get_esp_dispPE(int start){
+int Fdisk_::Get_esp_dispPE(int start){
     for(int i = 0; i < 4; i++){
         if(mbr.p[i].start >= start && mbr.p[i].status == 'A')
             return mbr.p[i].start - start;
     }
     return mbr.size - start;
 }
-int Fdisk::Get_esp_dispL(int start){
+int Fdisk_::Get_esp_dispL(int start){
     EBR ebr_aux = EBR();
     fseek(archivo, start, SEEK_SET);
     fread(&ebr_aux, sizeof(ebr_aux), 1, archivo);
-    int ebr_next = start, esp_disp, ebr_esp = 0;
+    int esp_disp, ebr_esp = 0;
     while(true){
         if(ebr_aux.next == -1){
             esp_disp = f_sizeMax - ebr_esp;
@@ -358,10 +487,33 @@ int Fdisk::Get_esp_dispL(int start){
             return esp_disp;
         }
         if(ebr_aux.status == 'A') ebr_esp = ebr_aux.size;
-        ebr_next = ebr_aux.next;
-        fseek(archivo, ebr_next, SEEK_SET);
+        fseek(archivo, ebr_aux.next, SEEK_SET);
         fread(&ebr_aux, sizeof(ebr_aux), 1, archivo);
-        if(ebr_aux.status == 'A') return ebr_next - ebr_esp;
+        if(ebr_aux.status == 'A') return (ebr_aux.start -sizeof(mbr)) - start - ebr_esp;
     }
     return f_sizeMax;
+}
+void Fdisk_::Ordernar_MBR(){
+    for(int i = 0; i < 4; i++){
+        if(mbr.p[i].status == 'N'){
+            for(int j = i + 1; j < 4; j++){
+                part = mbr.p[i];
+                mbr.p[i] = mbr.p[j];
+                mbr.p[j] = part;
+            }
+        }
+    }
+    for(int i = 0; i < 4; i++){
+        if(mbr.p[i].status == 'A'){
+            for(int j = i + 1; j < 4; j++){
+                if(mbr.p[j].status == 'N') break;
+                if(mbr.p[j].start < mbr.p[i].start){
+                    part = mbr.p[i];
+                    mbr.p[i] = mbr.p[j];
+                    mbr.p[j] = part;
+                }
+            }
+        }
+        else break;
+    }
 }

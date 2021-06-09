@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Edit::Inicializar(){
+void Edit_::Inicializar(){
     error = false;
 
     path = "";
@@ -11,7 +11,7 @@ void Edit::Inicializar(){
             Ejecutar();
 }
 
-bool Edit::Ingresar_Datos(){
+bool Edit_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-path=") == 0){
@@ -32,13 +32,13 @@ bool Edit::Ingresar_Datos(){
     return error;
 }
 
-bool Edit::Verificar_Datos(){
-    if(v.Ver_Cont())
-    if(v.Ver_Path3())
-    return true;
-    return false;
+bool Edit_::Verificar_Datos(){
+    error = true;
+    if(v.Ver_Cont()) error = false;
+    if(!v.Ver_Path3()) error = true;
+    return !error;
 }
 
-void Edit::Ejecutar(){
+void Edit_::Ejecutar(){
     
 }

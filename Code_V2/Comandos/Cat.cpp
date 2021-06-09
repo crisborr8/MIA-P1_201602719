@@ -1,6 +1,6 @@
 #include "../Headers.h"
 
-void Cat::Inicializar(){
+void Cat_::Inicializar(){
     error = false;
     
     file_n = nullptr;
@@ -10,7 +10,7 @@ void Cat::Inicializar(){
             Ejecutar();
 }
 
-bool Cat::Ingresar_Datos(){
+bool Cat_::Ingresar_Datos(){
     while(comando.length() > 0){
         comando_inicial = e.slower(comando);
         if(comando_inicial.find("-file") == 0){
@@ -26,13 +26,13 @@ bool Cat::Ingresar_Datos(){
     return error;
 }
 
-bool Cat::Verificar_Datos(){
-    if(file_n != nullptr) 
-    return true;
-    return false;
+bool Cat_::Verificar_Datos(){
+    error = true;
+    if(file_n != nullptr) error = false;
+    return !error;
 }
 
-void Cat::Ejecutar(){
+void Cat_::Ejecutar(){
     Files *file_new = file_n;
     while(file_new != nullptr){
         cout << file_new->numero << ": " << file_new->file << endl;
@@ -40,7 +40,7 @@ void Cat::Ejecutar(){
     }
 }
 
-void Cat::Add_File(){
+void Cat_::Add_File(){
     if(file_n == nullptr){
         file_n = new Files;
         file_n->file = ing_palabra;
