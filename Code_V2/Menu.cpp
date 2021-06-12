@@ -2,8 +2,8 @@
 #include <stdlib.h> 
 
 void Menu::Menu_Principal(){
-    system("sudo chmod -R -f 777 /home/archivos");
     comando_inicial = "";
+    montura = nullptr;
     while(comando_inicial!= "exit"){
         Mostrar_Menu();
         Comando();
@@ -20,7 +20,7 @@ void Menu::Mostrar_Menu(){
     cout << "****************************" << endl;
     cout << "****************************" << endl;
     cout << "\n\tIngrese un comando:" << endl;
-
+//rep -path=/home/archivos/a.jpg -id=191a -name=disk
     comando = "";
     getline(cin, comando);   
 }

@@ -13,7 +13,7 @@ bool Existe::Ex_Path_Folder(string path){
 
 bool Existe::Ex_Name(string name, string path){
     archivo = fopen(path.c_str(), "rb");
-    mbr = MBR();
+    mbr = Str::MBR();
     fseek(archivo, 0, SEEK_SET);
     fread(&mbr, sizeof(mbr), 1, archivo);
     fclose(archivo);
@@ -44,3 +44,30 @@ bool Existe::Ex_Name(string name, string path){
     }
     return false;
 }
+bool Existe::Ex_Montura(string name, string path){
+    if(montura != nullptr){
+        Str::Montura* montura_aux = montura;
+        do{
+            if(montura_aux->name == name && montura_aux->path == path) return true;
+            montura_aux = montura_aux->next;
+        }
+        while(montura_aux != nullptr);
+    }
+    return false;
+}
+bool Existe::Ex_MonturaId(string id){
+    if(montura != nullptr){
+        Str::Montura* montura_aux = montura;
+        string id_;
+        do{
+            id_ = "19" + to_string(montura_aux->numero);
+            id_ = id_ + montura_aux->letra;
+            if(id_ == id) return true;
+            montura_aux = montura_aux->next;
+        }
+        while(montura_aux != nullptr);
+    }
+    return false;
+}
+
+

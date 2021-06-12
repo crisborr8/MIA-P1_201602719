@@ -2,6 +2,7 @@
 #include "../Parser/Existe.cpp"
 #include "../Parser/Ingresar.cpp"
 #include "../Parser/Verificar.cpp"
+#include "../Parser/Get_Set.cpp"
 
 #include "../Comandos/Cat.cpp"
 #include "../Comandos/Chgrp.cpp"

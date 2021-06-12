@@ -88,10 +88,9 @@ void Fdisk_::Ejecutar(){
         switch (_case)
         {
         case 0: Crear(); break;
-        case 1:testing(); Eliminar(); break;
+        case 1: Eliminar(); break;
         case 2: Agregar(); break;
         }
-        testing();
     }
     else cout << "ERROR!! el archivo no existe" << endl;
 }
@@ -99,7 +98,7 @@ void Fdisk_::Ejecutar(){
 void Fdisk_::Crear(){
     if(!ex.Ex_Name(name, path)){
         archivo = fopen(path.c_str(), "rb");
-        mbr = MBR();
+        mbr = Str::MBR();
         fseek(archivo, 0, SEEK_SET);
         fread(&mbr, sizeof(mbr), 1, archivo);
         fclose(archivo);
@@ -183,14 +182,14 @@ void Fdisk_::Crear_Particion(){
             part.type = type[0];
             mbr.p[3] = part;
 
-            Ordernar_MBR();
+            gs.Ordernar_MBR();
 
             archivo = fopen(path.c_str(), "r+b");
             fseek(archivo, 0, SEEK_SET);
             fwrite(&mbr, sizeof(mbr), 1, archivo);
 
             if(type == "e"){
-                ebr = EBR();
+                ebr = Str::EBR();
                 ebr.status = 'N';
                 ebr.next = -1;
                 ebr.start = f_start + sizeof(ebr);
@@ -218,10 +217,10 @@ void Fdisk_::Crear_VerEspacio(){
                 f_start = part.start;
                 i_aux = 0;
                 do{
-                    ebr = EBR();
+                    ebr = Str::EBR();
                     fseek(archivo, f_start, SEEK_SET);
                     fread(&ebr, sizeof(ebr), 1, archivo);
-                    esp_disp = Get_esp_dispL(f_start) - sizeof(ebr);
+                    esp_disp = gs.Get_esp_dispL(f_start) - sizeof(ebr);
 
                     if(mbr.fit == 'b'){
                         if(esp_disp < esp_dispAnt && esp_disp >= size){ 
@@ -248,7 +247,7 @@ void Fdisk_::Crear_VerEspacio(){
             if(i == -1 || part.status == 'A'){
                 if(i == -1) f_start = sizeof(mbr);
                 else if(part.status == 'A') f_start = mbr.p[i].size + mbr.p[i].start;
-                esp_disp = Get_esp_dispPE(f_start);
+                esp_disp = gs.Get_esp_dispPE(f_start);
 
                 if(mbr.fit == 'b'){
                     if(esp_disp < esp_dispAnt && esp_disp >= size){
@@ -290,7 +289,7 @@ void Fdisk_::Eliminar(){
                                 ebr.status = 'N';
                                 strcpy(ebr.name, "");
                                 if(i_aux != f_start){ //No es el primero
-                                    EBR ebr_aux = EBR();
+                                    Str::EBR ebr_aux = Str::EBR();
                                     fseek(archivo, i_aux, SEEK_SET);
                                     fread(&ebr_aux, sizeof(ebr_aux), 1, archivo);
                                     ebr_aux.next = ebr.next;
@@ -323,7 +322,7 @@ void Fdisk_::Eliminar(){
                             fseek(archivo, mbr.p[i].start, SEEK_SET);
                             fwrite("0", 1, mbr.p[i].size, archivo);
                         }
-                        Ordernar_MBR();
+                        gs.Ordernar_MBR();
                         fseek(archivo, 0, SEEK_SET);
                         fwrite(&mbr, sizeof(mbr), 1, archivo);
                         break;
@@ -356,7 +355,7 @@ void Fdisk_::Agregar(){
                         if(ebr.status == 'A'){
                             if(strcmp(ebr.name, name.c_str()) == 0){
                                 if(add > 0){
-                                    i_aux = Get_esp_dispL(f_start + 1) + 1;
+                                    i_aux = gs.Get_esp_dispL(f_start + 1) + 1;
                                     if(i_aux > add) cout << "ERROR!! Espacio insuficiente" << endl;
                                     else ebr.size += add;
                                 }
@@ -381,7 +380,7 @@ void Fdisk_::Agregar(){
                 if(strcmp(mbr.p[i].name, name.c_str()) == 0){
                     part = mbr.p[i];
                     if(add > 0){
-                        i_aux = Get_esp_dispPE(part.start + 1) + 1;
+                        i_aux = gs.Get_esp_dispPE(part.start + 1) + 1;
                         if(i_aux >= add){
                             mbr.p[i].size += add;
                             fseek(archivo, 0, SEEK_SET);
@@ -426,94 +425,4 @@ void Fdisk_::Agregar(){
         fclose(archivo);
     }
     else cout << "ERROR!! el nombre no existe en esta particion" << endl;
-}
-
-void Fdisk_::testing(){
-
-    archivo = fopen(path.c_str(), "rb");
-    fseek(archivo, 0, SEEK_SET);
-    fread(&mbr, sizeof(mbr), 1, archivo);
-    cout << "MBR:" << endl;
-    cout << "Size: " << mbr.size << endl;
-    cout << "Fit: " << mbr.fit << endl;
-
-    for(int i = 0; i < 4; i++){
-        part = mbr.p[i];
-        cout << "Particion " << i + 1 << ":" << endl;
-        cout << "\tNombre: " << part.name << endl;
-        cout << "\tStatus: " << part.status << endl;
-        cout << "\tType: " << part.type << endl;
-        cout << "\tFit: " << part.fit << endl;
-        cout << "\tStart: " << part.start << endl; 
-        cout << "\tSize: " << part.size << endl;
-        if(part.type == 'e' && part.status == 'A'){
-            f_start = part.start;
-            i_aux = 1;
-            do{
-                fseek(archivo, f_start, SEEK_SET);
-                fread(&ebr, sizeof(ebr), 1, archivo);
-                cout << "\tParticion logica " << i_aux << ":" << endl;
-                cout << "\t\tNombre: " << ebr.name << endl;
-                cout << "\t\tStatus: " << ebr.status << endl;
-                cout << "\t\tFit: " << ebr.fit << endl;
-                cout << "\t\tStart: " << ebr.start << endl;
-                cout << "\t\tSize: " << ebr.size << endl;
-                cout << "\t\tNext: " << ebr.next << endl;
-                f_start = ebr.next;
-                i_aux++;
-            }while(ebr.next != -1);
-        }
-    }
-
-    fclose(archivo);
-
-}
-int Fdisk_::Get_esp_dispPE(int start){
-    for(int i = 0; i < 4; i++){
-        if(mbr.p[i].start >= start && mbr.p[i].status == 'A')
-            return mbr.p[i].start - start;
-    }
-    return mbr.size - start;
-}
-int Fdisk_::Get_esp_dispL(int start){
-    EBR ebr_aux = EBR();
-    fseek(archivo, start, SEEK_SET);
-    fread(&ebr_aux, sizeof(ebr_aux), 1, archivo);
-    int esp_disp, ebr_esp = 0;
-    while(true){
-        if(ebr_aux.next == -1){
-            esp_disp = f_sizeMax - ebr_esp;
-            if(ebr_aux.status == 'A') esp_disp -= ebr_aux.size;
-            return esp_disp;
-        }
-        if(ebr_aux.status == 'A') ebr_esp = ebr_aux.size;
-        fseek(archivo, ebr_aux.next, SEEK_SET);
-        fread(&ebr_aux, sizeof(ebr_aux), 1, archivo);
-        if(ebr_aux.status == 'A') return (ebr_aux.start -sizeof(mbr)) - start - ebr_esp;
-    }
-    return f_sizeMax;
-}
-void Fdisk_::Ordernar_MBR(){
-    for(int i = 0; i < 4; i++){
-        if(mbr.p[i].status == 'N'){
-            for(int j = i + 1; j < 4; j++){
-                part = mbr.p[i];
-                mbr.p[i] = mbr.p[j];
-                mbr.p[j] = part;
-            }
-        }
-    }
-    for(int i = 0; i < 4; i++){
-        if(mbr.p[i].status == 'A'){
-            for(int j = i + 1; j < 4; j++){
-                if(mbr.p[j].status == 'N') break;
-                if(mbr.p[j].start < mbr.p[i].start){
-                    part = mbr.p[i];
-                    mbr.p[i] = mbr.p[j];
-                    mbr.p[j] = part;
-                }
-            }
-        }
-        else break;
-    }
 }

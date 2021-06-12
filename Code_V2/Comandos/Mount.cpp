@@ -40,5 +40,104 @@ bool Mount_::Verificar_Datos(){
 }
 
 void Mount_::Ejecutar(){
-    
+    if(ex.Ex_Path_File(path)){
+        if(ex.Ex_Name(name, path)){
+            if(!ex.Ex_Montura(name, path)){
+                Str::Montura* m_aux = montura;
+                int numero = 1;
+                char letra = 'a';
+                if(montura != nullptr){
+                    i_aux = 0;
+                    do{
+                        if(m_aux->path == path){
+                            numero = m_aux->numero;
+                            do{
+                                if(m_aux->numero != numero) break;
+                                if(letra != m_aux->letra) break;
+                                else letra = m_aux->letra + 1;
+                                m_aux = m_aux->next;
+
+                            }while(m_aux != nullptr);
+                            break;
+                        }
+                        else if(numero + 1 > m_aux->numero) numero = m_aux->numero + 1;
+                        m_aux = m_aux->next;
+                    }while(m_aux != nullptr);
+                }
+                Str::Montura* m_new = new Str::Montura;
+                m_new->name = name;
+                m_new->path = path;
+                m_new->letra = letra;
+                m_new->next = montura;
+                m_new->numero = numero;
+                if(montura != nullptr) m_new->next = montura;
+                else m_new->next = nullptr;
+                montura = m_new;
+
+                while(m_new->next != nullptr){
+                    if(m_new->numero > m_new->next->numero){
+                        if(m_new == montura){
+                            montura = m_new->next;
+                            m_new->next = montura->next;
+                            montura->next = m_new;
+                            m_new = montura;
+                        }
+                        else{
+                            m_aux->next = m_new->next;
+                            m_aux = m_new->next;
+                            m_new->next = m_aux->next;
+                            m_aux->next = m_new;
+                            m_new = m_aux;
+                        }
+                    }
+                    else{
+                        while(m_new->next != nullptr){
+                            if(m_new->numero < m_new->next->numero) break;
+                            if(m_new->letra > m_new->next->letra){
+                                if(m_new == montura){
+                                    montura = m_new->next;
+                                    m_new->next = montura->next;
+                                    montura->next = m_new;
+                                    m_new = montura;
+                                }
+                                else{
+                                    m_aux->next = m_new->next;
+                                    m_aux = m_new->next;
+                                    m_new->next = m_aux->next;
+                                    m_aux->next = m_new;
+                                    m_new = m_aux;
+                                }
+                            }
+                            else break;
+                            m_aux = m_new;
+                            m_new = m_new->next;
+                        }
+                        break;
+                    }
+                    m_aux = m_new;
+                    m_new = m_new->next;
+                }
+                cout << "Montura creada con id = " << 19 << to_string(numero) << letra << endl;
+
+                m_aux = montura;
+                while(m_aux != nullptr){
+                    cout << "Particion: " << m_aux->numero << endl;
+                    i_aux = m_aux->numero;
+                    while(m_aux != nullptr){
+                        cout << "\tLetra: " << m_aux->letra << endl;
+                        cout << "\t\tName: " << m_aux->name << endl;
+                        cout << "\t\tPath: " << m_aux->path << endl;
+                        if(m_aux->next == nullptr) break;
+                        if(i_aux != m_aux->next->numero) break;
+                        else m_aux = m_aux->next;
+                    }
+                    if(m_aux == nullptr) break;
+                    m_aux = m_aux->next;
+                }
+            } 
+            else cout << "ERROR!! Particion ya esta montada" << endl;
+        }
+        else cout << "ERROR!! El nombre de la particion no existe" << endl;
+    }
+    else cout << "ERROR!! El archivo no existe" << endl;
 }

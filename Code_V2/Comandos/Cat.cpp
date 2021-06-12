@@ -33,7 +33,7 @@ bool Cat_::Verificar_Datos(){
 }
 
 void Cat_::Ejecutar(){
-    Files *file_new = file_n;
+    Str::Files *file_new = file_n;
     while(file_new != nullptr){
         cout << file_new->numero << ": " << file_new->file << endl;
         file_new = file_new->next;
@@ -42,15 +42,15 @@ void Cat_::Ejecutar(){
 
 void Cat_::Add_File(){
     if(file_n == nullptr){
-        file_n = new Files;
+        file_n = new Str::Files;
         file_n->file = ing_palabra;
         file_n->numero = ing_numero;
         file_n->next = nullptr;
     }
     else{
-        Files *file_new = file_n;
+        Str::Files *file_new = file_n;
         while(file_new->next != nullptr) file_new = file_new->next;
-        file_new->next = new Files;
+        file_new->next = new Str::Files;
         file_new = file_new->next;
         file_new->file = ing_palabra;
         file_new->numero = ing_numero;
