@@ -85,7 +85,7 @@ void Get_Set::SetMBR(){
 string Get_Set::Get_Date(time_t fecha){
     tm *t = localtime(&fecha);
     stringstream stream;
-    stream << t->tm_mday << "/" << t->tm_mon << "/" << t->tm_year << " " << 1 + t->tm_hour << ":" << 1 + t->tm_min << ":" << 1 + t->tm_sec;
+    stream << t->tm_mday << "/" << 1 + t->tm_mon << "/" << 1900 + t->tm_year << " " << 1 + t->tm_hour << ":" << 1 + t->tm_min << ":" << 1 + t->tm_sec;
     return stream.str();
 }
 void Get_Set::SetSuperBloque(int partition_size, int filesystem_type){

@@ -200,6 +200,8 @@ void Rep_::Graph_disk(){
                 dot += "<TR><TD><FONT POINT-SIZE='8.5' FACE='times:italic'>" + to_string(100 * part.size / mbr.size) + "% DEL DISCO</FONT></TD></TR>\n";
                 dot += "</TABLE></TD>\n";
             }
+
+            f_start = part.start + part.size;
         }
         else{
             if(f_start == sizeof(mbr)) f_start = 0;
@@ -242,6 +244,13 @@ void Rep_::Graph_ls(){
 }
 bool Rep_::Graficar(){
     dot += "\n}";
-    cout << dot << endl;
+    ofstream dot_file;
+    dot_file.open("/home/archivos/dot.dot");
+    dot_file << dot;
+    dot_file.close();
+    dot = "dot /home/archivos/dot.dot -T" + path.substr(path.find_last_of('.') + 1, path.length()) + " -o " + path;
+    system(dot.c_str());
+    dot = "xdg-open " + path;
+    system(dot.c_str());
     return false;
 }

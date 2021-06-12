@@ -20,7 +20,7 @@ void Menu::Mostrar_Menu(){
     cout << "****************************" << endl;
     cout << "****************************" << endl;
     cout << "\n\tIngrese un comando:" << endl;
-//rep -path=/home/archivos/a.jpg -id=191a -name=disk
+//rep -path=/home/archivos/b.pdf -id=191a -name=disk
     comando = "";
     getline(cin, comando);   
 }
