@@ -70,6 +70,7 @@ void Mount_::Ejecutar(){
                 m_new->letra = letra;
                 m_new->next = montura;
                 m_new->numero = numero;
+                m_new->fit_type = gs.Get_FitType(path, name);
                 if(montura != nullptr) m_new->next = montura;
                 else m_new->next = nullptr;
                 montura = m_new;
@@ -118,22 +119,6 @@ void Mount_::Ejecutar(){
                     m_new = m_new->next;
                 }
                 cout << "Montura creada con id = " << 19 << to_string(numero) << letra << endl;
-
-                m_aux = montura;
-                while(m_aux != nullptr){
-                    cout << "Particion: " << m_aux->numero << endl;
-                    i_aux = m_aux->numero;
-                    while(m_aux != nullptr){
-                        cout << "\tLetra: " << m_aux->letra << endl;
-                        cout << "\t\tName: " << m_aux->name << endl;
-                        cout << "\t\tPath: " << m_aux->path << endl;
-                        if(m_aux->next == nullptr) break;
-                        if(i_aux != m_aux->next->numero) break;
-                        else m_aux = m_aux->next;
-                    }
-                    if(m_aux == nullptr) break;
-                    m_aux = m_aux->next;
-                }
             } 
             else cout << "ERROR!! Particion ya esta montada" << endl;
         }

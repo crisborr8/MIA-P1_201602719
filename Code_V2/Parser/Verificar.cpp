@@ -164,16 +164,3 @@ bool Verificar::Ver_Path4(){
     else cout << "ERROR!! -path= debe terminar en .script" << endl;
     return false;
 }
-bool Verificar::Ver_Path5(){
-    i_aux = path.find_last_of(".");
-    if(i_aux > 0){
-        if(i_aux > 1){
-            string ext = e.slower(path.substr(i_aux, path.length()));
-            if(ext == ".jpg" || ext == ".png" || ext == ".jpeg" || ext == ".jpe" || ext == ".pdf") return true;
-            cout << "ERROR!! -path= debe terminar en .jpg, .jpeg, .jpe, .png, .pdf" << endl;
-        }
-        else cout << "ERROR!! -path= debe ser una ruta valida" << endl;
-    }
-    else cout << "ERROR!! -path= debe terminar en .jpg, .jpeg, .jpe, .png, .pdf" << endl;
-    return false;
-}

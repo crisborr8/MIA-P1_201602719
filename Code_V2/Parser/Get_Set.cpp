@@ -82,33 +82,110 @@ void Get_Set::SetMBR(){
     mbr.p[0] = mbr.p[1] = mbr.p[2] = mbr.p[3] = part;
 }
 
+int Get_Set::Get_StartPartitionPoint(string path, string name){
+    archivo = fopen(path.c_str(), "rb");
+    mbr = Str::MBR();
+    fseek(archivo, 0, SEEK_SET);
+    fread(&mbr, sizeof(mbr), 1, archivo);
+    fclose(archivo);
+    for(i_aux = 0; i_aux < 4; i_aux++){
+        part = mbr.p[i_aux];
+        if(part.status == 'A'){
+            if(part.type != 'l'){
+                if(strcmp(part.name, name.c_str()) == 0){
+                    f_sizeMax = part.size;
+                    return part.start;
+                }
+            }
+            if(part.type == 'e'){
+                archivo = fopen(path.c_str(), "rb");
+                f_start = part.start;
+                do{
+                    fseek(archivo, f_start, SEEK_SET);
+                    fread(&ebr, sizeof(ebr), 1, archivo);
+                    if(ebr.status == 'A'){
+                        if(strcmp(ebr.name, name.c_str()) == 0){
+                            fclose(archivo);
+                            type = "l";
+                            f_sizeMax = ebr.size;
+                            return ebr.start;
+                        }
+                    }
+                    f_start = ebr.next;
+                }while(ebr.next != -1);
+                fclose(archivo);
+            }
+        }
+    }
+    return 0;
+}
+
+
 string Get_Set::Get_Date(time_t fecha){
     tm *t = localtime(&fecha);
     stringstream stream;
     stream << t->tm_mday << "/" << 1 + t->tm_mon << "/" << 1900 + t->tm_year << " " << 1 + t->tm_hour << ":" << 1 + t->tm_min << ":" << 1 + t->tm_sec;
     return stream.str();
 }
-void Get_Set::SetSuperBloque(int partition_size, int filesystem_type){
-    superbloque = Str::Superbloque();
 
-    superbloque.s_mnt_count = 0;
-    superbloque.s_magic = 0xEF53;
-    superbloque.s_filesystem_type = filesystem_type;
-    superbloque.s_mtime = chrono::system_clock::to_time_t(chrono::system_clock::now());
-    superbloque.s_umtime = chrono::system_clock::to_time_t(chrono::system_clock::now());
+char Get_Set::Get_FitType(string path, string name){
+    archivo = fopen(path.c_str(), "rb");
+    mbr = Str::MBR();
+    fseek(archivo, 0, SEEK_SET);
+    fread(&mbr, sizeof(mbr), 1, archivo);
+    fclose(archivo);
+    for(i_aux = 0; i_aux < 4; i_aux++){
+        part = mbr.p[i_aux];
+        if(part.status == 'A'){
+            if(part.type != 'l'){
+                if(strcmp(part.name, name.c_str()) == 0) return part.fit;
+            }
+            if(part.type == 'e'){
+                archivo = fopen(path.c_str(), "rb");
+                f_start = part.start;
+                do{
+                    fseek(archivo, f_start, SEEK_SET);
+                    fread(&ebr, sizeof(ebr), 1, archivo);
+                    if(ebr.status == 'A'){
+                        if(strcmp(ebr.name, name.c_str()) == 0){
+                            fclose(archivo);
+                            type = "l";
+                            return ebr.fit;
+                        }
+                    }
+                    f_start = ebr.next;
+                }while(ebr.next != -1);
+                fclose(archivo);
+            }
+        }
+    }
+    return '0';
+}
+
+void Get_Set::Set_SuperBloque(int partition_size, int filesystem_type){
+    superbloque = Str::Superbloque();
     if(filesystem_type == 0){
-        superbloque.s_inodes_count = (partition_size - sizeof(superbloque))/(4 + sizeof(inodos) + 3*sizeof(bloques_carpeta));
-        
-        superbloque.s_bm_inode_start += sizeof(journaling);
-        superbloque.s_block_start += sizeof(journaling);
+        i_aux = (partition_size - sizeof(superbloque))/(4 + sizeof(inodos) + 3*sizeof(bloques_carpeta));
+        superbloque.s_bm_inode_start = sizeof(superbloque);
     }
     else{
-        superbloque.s_inodes_count = (partition_size - sizeof(superbloque))/(4 + sizeof(journaling)+ sizeof(inodos) + 3*sizeof(bloques_carpeta));
-        
+        i_aux = (partition_size - sizeof(superbloque))/(4 + sizeof(journaling) + sizeof(inodos) + 3*sizeof(bloques_carpeta));
+        superbloque.s_bm_inode_start = sizeof(superbloque) + i_aux*sizeof(journaling);
     }
-    superbloque.s_blocks_count = superbloque.s_inodes_count * 3;
-    superbloque.s_free_blocks_count = superbloque.s_blocks_count;
-    superbloque.s_free_inodes_count = superbloque.s_inodes_count;
-    superbloque.s_first_blo = 0;
+    superbloque.s_filesystem_type = filesystem_type;
+    superbloque.s_inodes_count = i_aux;
+    superbloque.s_blocks_count = 3*i_aux;
+    superbloque.s_free_blocks_count = 3*i_aux;
+    superbloque.s_free_inodes_count = i_aux;
+    superbloque.s_mtime = chrono::system_clock::to_time_t(chrono::system_clock::now());
+    superbloque.s_umtime = chrono::system_clock::to_time_t(chrono::system_clock::now());
+    superbloque.s_mnt_count = 0;
+    superbloque.s_magic = 0xEF53;
+    superbloque.s_inode_size = sizeof(inodos);
+    superbloque.s_block_size = sizeof(bloques_carpeta);
     superbloque.s_first_ino = 0;
+    superbloque.s_first_blo = 0;
+    superbloque.s_bm_block_start = superbloque.s_bm_inode_start + i_aux;
+    superbloque.s_inode_start = superbloque.s_bm_block_start + 3*i_aux;
+    superbloque.s_block_start = superbloque.s_inode_start + i_aux*sizeof(inodos);
 }

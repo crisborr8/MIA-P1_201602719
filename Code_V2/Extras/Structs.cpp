@@ -35,11 +35,12 @@ struct Str::Montura{
     int numero;
     string path;
     string name;
+    char fit_type;
     Montura* next;
 };
 
 struct Str::Journaling{
-    string comando;
+    char comando[50];
 };
 struct Str::Superbloque{
     int s_filesystem_type;
@@ -67,7 +68,7 @@ struct Str::Inodos{
     time_t i_atime;
     time_t i_ctime;
     time_t i_mtime;
-    int i_block;
+    int i_block[15];
     char i_type;
     int i_perm;
 };

@@ -14,10 +14,15 @@ bool r, p;
 int size, add;
 string f, u, type, delet, path, name, id, fs, usr, pwd, grp, ugo, cont, dest, ruta;
 
+char e_fit;
+int gid, uid;
+string e_texto, e_path;
+
 int f_start, f_sizeMax;
 
 FILE *archivo;
 Str::Montura *montura;
+Str::Montura *m_actual;
 Str::MBR mbr;
 Str::EBR ebr;
 Str::Particion part;
@@ -63,7 +68,6 @@ class Verificar{
         bool Ver_Path2();
         bool Ver_Path3();
         bool Ver_Path4();
-        bool Ver_Path5();
 };
 class Ingresar{
     private:
@@ -91,8 +95,31 @@ class Get_Set{
         string Get_Date(time_t fecha);
         void Ordernar_MBR();
         void SetMBR();
-        void SetSuperBloque(int partition_size, int filesystem_type);
         Str::Montura* Get_Mount(string id);
+        int Get_StartPartitionPoint(string path, string name);
+        char Get_FitType(string path, string name);
+        void Set_SuperBloque(int partition_size, int filesystem_type);
+};
+class Escritura{
+    public:
+        void Esc_INodo(int i);
+        void Esc_BloqueCarpeta(int i);
+        void Esc_BloqueArchivo(int i);
+        void Esc_BloqueApuntad(int i);
+        void Esc_BloqueArchivo(int i);
+        void Esc_SuperBloque_BlockCount(int i);
+        void Esc_SuperBloque_INodeCount(int i);
+        void Esc_EscrituraArchivo();
+        void Esc_EscrituraCarpeta();
+        int Esc_GetFreeINodo();
+        int Esc_GetFreeBlock();
+        int Esc_GetINodoPos(string path, int pos);
+        int Esc_GetNewINodePosition();
+        int Esc_GetNewBlockPosition();
+        void Esc_SetInodos(int actual, int padre);
+        void Esc_SetBloqueCarpetaInicial(int actual, int padre);
+        void Esc_SetBloqueCarpeta();
+        void Esc_SetBloqueApuntad();
 };
 
 class Comandos{
@@ -102,6 +129,7 @@ class Comandos{
         Existe ex;
         Ingresar i;
         Verificar v;
+        Escritura es;
 };
 
 class Cat_: public Comandos{
@@ -306,7 +334,8 @@ class Rep_: public Comandos{
         void Graph_sb();
         void Graph_file();
         void Graph_ls();
-        bool Graficar();
+        void Graficar();
+        void Graficar_Txt();
     public:
         void Inicializar();
 };

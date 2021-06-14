@@ -43,7 +43,7 @@ bool Rep_::Ingresar_Datos(){
 
 bool Rep_::Verificar_Datos(){
     error = true;
-    if(v.Ver_Path5()) error = false;
+    if(v.Ver_Path3()) error = false;
     if(!v.Ver_Id()) error = true;
     if(!v.Ver_Name()) error = true;
     return !error;
@@ -53,6 +53,7 @@ void Rep_::Ejecutar(){
     if(ex.Ex_MonturaId(id)){
         dot = "digraph G{";
         name = e.slower(name);
+        m_actual = gs.Get_Mount(id);
         if(name == "mbr") Graph_mbr();
         else if(name == "disk") Graph_disk();
         else if(name == "inode") Graph_inode();
@@ -71,14 +72,13 @@ void Rep_::Ejecutar(){
 }
 
 void Rep_::Graph_mbr(){
-    Str::Montura *m_aux = gs.Get_Mount(id);
     dot += "rankdir=LR;\nnode [shape=plaintext];\n";
     dot += "rep [label=<\n<TABLE BORDER='0' CELLBORDER='0' CELLSPACING='0'>\n";
-    dot += "<TR><TD>MBR " + m_aux->path.substr(m_aux->path.find_last_of('/') + 1, m_aux->path.length()) + "</TD></TR>\n<TR><TD>\n";
+    dot += "<TR><TD>MBR " + m_actual->path.substr(m_actual->path.find_last_of('/') + 1, m_actual->path.length()) + "</TD></TR>\n<TR><TD>\n";
     dot += "<TABLE BORDER='0' CELLBORDER='1' CELLSPACING='0'>\n";
     dot += "<TR><TD BGCOLOR='cornflowerblue'>Nombre</TD><TD BGCOLOR='cornflowerblue'>Valor</TD></TR>\n";
     
-    archivo = fopen(m_aux->path.c_str(), "rb");
+    archivo = fopen(m_actual->path.c_str(), "rb");
     fseek(archivo, 0, SEEK_SET);
     fread(&mbr, sizeof(mbr), 1, archivo);
 
@@ -136,12 +136,11 @@ void Rep_::Graph_mbr(){
     Graficar();
 }
 void Rep_::Graph_disk(){
-    Str::Montura *m_aux = gs.Get_Mount(id);
-    dot += "rankdir=LR;\nnode [shape=plaintext];\nlabel=\""+ m_aux->path.substr(m_aux->path.find_last_of('/') + 1, m_aux->path.length()) +"\";\nlabelloc=\"t\";\n";
+    dot += "rankdir=LR;\nnode [shape=plaintext];\nlabel=\""+ m_actual->path.substr(m_actual->path.find_last_of('/') + 1, m_actual->path.length()) +"\";\nlabelloc=\"t\";\n";
     dot += "disk [label=<\n<TABLE BORDER='1' CELLBORDER='1' CELLSPACING='4' BGCOLOR='darkolivegreen1'>\n";
     dot += "<TR><TD BGCOLOR='seagreen1'>MBR</TD>\n";
 
-    archivo = fopen(m_aux->path.c_str(), "rb");
+    archivo = fopen(m_actual->path.c_str(), "rb");
     fseek(archivo, 0, SEEK_SET);
     fread(&mbr, sizeof(mbr), 1, archivo);
 
@@ -222,10 +221,16 @@ void Rep_::Graph_journaling(){
     Graficar();
 }
 void Rep_::Graph_block(){
-    Graficar();
+    dot = "";
+    f_start = gs.Get_StartPartitionPoint(m_actual->path, m_actual->name);
+
+    Graficar_Txt();
 }
 void Rep_::Graph_bm_inode(){
-    Graficar();
+    dot = "";
+    f_start = gs.Get_StartPartitionPoint(m_actual->path, m_actual->name);
+
+    Graficar_Txt();
 }
 void Rep_::Graph_bm_block(){
     Graficar();
@@ -242,7 +247,7 @@ void Rep_::Graph_file(){
 void Rep_::Graph_ls(){
     Graficar();
 }
-bool Rep_::Graficar(){
+void Rep_::Graficar(){
     dot += "\n}";
     ofstream dot_file;
     dot_file.open("/home/archivos/dot.dot");
@@ -252,5 +257,14 @@ bool Rep_::Graficar(){
     system(dot.c_str());
     dot = "xdg-open " + path;
     system(dot.c_str());
-    return false;
+    cout << "Reporte " << name << " generado con exito" << endl;
+}
+void Rep_::Graficar_Txt(){
+    ofstream dot_file;
+    dot_file.open(path);
+    dot_file << dot;
+    dot_file.close();
+    dot = "xdg-open " + path;
+    system(dot.c_str());
+    cout << "Reporte " << name << " generado con exito" << endl;
 }
