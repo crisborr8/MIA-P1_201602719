@@ -34,8 +34,10 @@ void Escritura::Esc_Crear_INodo(int pos_inodo, int padre){
         Esc_SetNew_INodo();
         int pos_bloque = Esc_GetFree_Bloque();
         inodos.i_block[0] = pos_bloque;
+        cout << "INodo: " << pos_inodo <<"Bloque: " << inodos.i_block[0] << endl;
         Esc_Updt_INodo(pos_inodo);
         Esc_Bitmap_INodo(pos_inodo, 1);
+
         Esc_Crear_BloqueCarpeta(pos_bloque);
         strcpy(bloques_carpeta.b_content[0].b_name, ".");
         bloques_carpeta.b_content[0].b_inodo = pos_inodo;
@@ -227,7 +229,9 @@ int Escritura::Esc_Crear_Carpeta(){
                         Esc_Read_BloqueCarpeta(inodos.i_block[i]);
                         for(int bc = 2; bc < 4; bc++){
                             if(bloques_carpeta.b_content[bc].b_inodo == -1){
+                                cout << "Leo esto en carpeta: " << inodos.i_block[i] << ", con inodo: " << pos << endl;
                                 pos_aux = Esc_Crear_Carpeta_BloqueCarpeta(inodos.i_block[i], pos, bc, pth);
+                                cout << "----------------------" << endl;
                                 ingresado = true;
                                 break;
                             }
@@ -374,10 +378,10 @@ int Escritura::Esc_Crear_Carpeta_BloqueCarpeta(int updt_bc, int pos, int bc, str
     bloques_carpeta.b_content[bc].b_inodo = newpos;
     strcpy(bloques_carpeta.b_content[bc].b_name, pth.c_str());
     Esc_Updt_BloqueCarpeta(updt_bc);
+    cout << "Se ha incertado un apuntador al nodo: " << newpos << endl;
+    cout << "Lo apunta la carpeta: " << updt_bc << endl;
     Esc_Crear_INodo(newpos, pos);
-    cout << "-------------------" << endl;
-    cout << "ID inodo: " << newpos << endl;
-    cout << "ID apt: " << inodos.i_block[0] << endl;
+    cout << "El inodo " << newpos << " esta con la carpeta " << inodos.i_block[0] << endl;
     return newpos;
 }
 

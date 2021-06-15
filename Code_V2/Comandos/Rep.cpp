@@ -241,7 +241,7 @@ void Rep_::Graph_inodeRec(int pos){
     else dot += "<TR><TD>i_perm</TD><TD>" + to_string(inodos.i_perm) + "</TD></TR>\n";
     dot += "</TABLE></TD></TR>\n</TABLE>>];\n";
 
-    cout << "AQui con " << pos << endl;
+    cout << "---------Aqui con " << pos << endl;
     if(inodos.i_type == 0){
         stack<int> stack;
         for(int i = 0; i < 15; i++){
@@ -249,7 +249,6 @@ void Rep_::Graph_inodeRec(int pos){
                 if(i == 0){
                     es.Esc_Read_BloqueCarpeta(inodos.i_block[i]);
                     for(int bc = 2; bc < 4; bc++){
-                        cout << "apuntador: " << bloques_carpeta.b_content[bc].b_inodo << endl;
                         if(bloques_carpeta.b_content[bc].b_inodo != -1)
                             stack.push(bloques_carpeta.b_content[bc].b_inodo);
                     }
@@ -321,11 +320,11 @@ void Rep_::Graph_inodeRec(int pos){
         
         cout << "Finalizado:-----" << endl;
         while(!stack.empty()){
-            dot += "inodo_" + to_string(pos) + "->inodo_" + to_string(stack.top()) + "\n;";
             i_aux = stack.top();
-            cout << "--Stack: " << i_aux << endl;
+            dot += "inodo_" + to_string(pos) + "->inodo_" + to_string(i_aux) + "\n;";
+            cout << "----->Stack: " << i_aux << endl;
             stack.pop();
-            Graph_inodeRec(i_aux);
+            if(i_aux != pos) Graph_inodeRec(i_aux);
         }
     }
 }
@@ -382,6 +381,7 @@ void Rep_::Graph_bm_block(){
     Graficar_Txt();
 }
 void Rep_::Graph_tree(){
+
     Graficar();
 }
 void Rep_::Graph_sb(){
