@@ -54,27 +54,32 @@ void Mkfs_::Ejecutar(){
         if(fs == "2fs") gs.Set_SuperBloque(f_sizeMax, 0);
         else gs.Set_SuperBloque(f_sizeMax, 1);
 
-        archivo = fopen(m_actual->path.c_str(), "r+b");
         fseek(archivo, f_start, SEEK_SET);
         fwrite(&superbloque, sizeof(superbloque), 1, archivo);
+
+        char zero1[superbloque.s_inodes_count] { '0' };
         fseek(archivo, f_start + superbloque.s_bm_inode_start, SEEK_SET);
-        fwrite("0", 1, 4*i_aux, archivo);
+        fwrite(&zero1, sizeof(zero1), 1, archivo);
+        char zero2[superbloque.s_blocks_count] { '0' };
+        fseek(archivo, f_start + superbloque.s_bm_block_start, SEEK_SET);
+        fwrite(&zero2, sizeof(zero2), 1, archivo);
         if(type == "full"){
+            char zero3[superbloque.s_inodes_count*superbloque.s_inode_size + superbloque.s_blocks_count*superbloque.s_block_size] = {0};
             fseek(archivo, f_start + superbloque.s_inode_start, SEEK_SET);
-            fwrite("0", 1, sizeof(inodos)*i_aux + sizeof(bloques_carpeta)*3*i_aux, archivo);
+            fwrite(&zero3, sizeof(zero3), 1, archivo);
         }
 
         uid = gid = 1; //id user, id grupo
-        int id_inodo = es.Esc_GetFreeINodo();
-        es.Esc_SetInodos(id_inodo, 0); //actual, padre
-        inodos.i_block[0] = es.Esc_GetFreeBlock(); //bloque al que apunta
-        es.Esc_INodo(id_inodo); //id - inodo actual
-        es.Esc_BloqueCarpeta(inodos.i_block[0]); //id - bloque al que apunta
+        es.Esc_Crear_INodo(0, 0);
 
-        e_path = "/user.txt";
+        e_path = "/e/f/user.txt";
         e_fit = m_actual->fit_type;
         e_texto = "1,G,root\n1,U,root,root,123\n";
-        es.Esc_EscrituraArchivo();
+        es.Esc_Crear_Archivo();
+        e_path = "/a/b/user.txt";
+        es.Esc_Crear_Archivo();
+        e_path = "/e/b/user.txt";
+        es.Esc_Crear_Archivo();
 
         fclose(archivo);
         cout << "Formateo realizado con éxito" << endl;

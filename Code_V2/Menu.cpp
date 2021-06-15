@@ -20,7 +20,11 @@ void Menu::Mostrar_Menu(){
     cout << "****************************" << endl;
     cout << "****************************" << endl;
     cout << "\n\tIngrese un comando:" << endl;
+    //exec -path=/home/criss/Escritorio/Criss/MIA_P1_201602719/Tests/a.script
+    //mount -path=/home/archivos/Disco2.dk -name=Part12
 //rep -path=/home/archivos/b.pdf -id=191a -name=disk
+//rep -path=/home/archivos/inodos.jpg -id=191a -name=inode
+//rep -path=/home/archivos/bminode.txt -id=191a -name=bm_inode
     comando = "";
     getline(cin, comando);   
 }

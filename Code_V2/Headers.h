@@ -101,25 +101,47 @@ class Get_Set{
         void Set_SuperBloque(int partition_size, int filesystem_type);
 };
 class Escritura{
+    private:
+        int type_inodo;
+        bool esArchivo;
     public:
-        void Esc_INodo(int i);
-        void Esc_BloqueCarpeta(int i);
-        void Esc_BloqueArchivo(int i);
-        void Esc_BloqueApuntad(int i);
-        void Esc_BloqueArchivo(int i);
-        void Esc_SuperBloque_BlockCount(int i);
-        void Esc_SuperBloque_INodeCount(int i);
-        void Esc_EscrituraArchivo();
-        void Esc_EscrituraCarpeta();
-        int Esc_GetFreeINodo();
-        int Esc_GetFreeBlock();
-        int Esc_GetINodoPos(string path, int pos);
-        int Esc_GetNewINodePosition();
-        int Esc_GetNewBlockPosition();
-        void Esc_SetInodos(int actual, int padre);
-        void Esc_SetBloqueCarpetaInicial(int actual, int padre);
-        void Esc_SetBloqueCarpeta();
-        void Esc_SetBloqueApuntad();
+        void Esc_SetNew_INodo();
+        void Esc_SetNew_BloqueArchivo();
+        void Esc_SetNew_BloqueApuntad();
+        void Esc_SetNew_BloqueCarpeta();
+
+        void Esc_Crear_INodo(int pos, int padre);
+        void Esc_Crear_INodoArchivo(int pos);
+        void Esc_Crear_BloqueArchivo(int pos);
+        void Esc_Crear_BloqueCarpeta(int pos);
+        void Esc_Crear_BloqueApuntad_1(int pos);
+        void Esc_Crear_BloqueApuntad_2(int pos);
+        void Esc_Crear_BloqueApuntad_3(int pos);
+
+        void Esc_Read_Superbloque();
+        void Esc_Read_INodo(int pos);
+        void Esc_Read_BloqueArchivo(int pos);
+        void Esc_Read_BloqueApuntad(int pos);
+        void Esc_Read_BloqueCarpeta(int pos);
+
+        void Esc_Updt_INodo(int pos);
+        void Esc_Updt_BloqueArchivo(int pos);
+        void Esc_Updt_BloqueApuntad(int pos);
+        void Esc_Updt_BloqueCarpeta(int pos);
+
+        void Esc_Bitmap_INodo(int pos, int i);
+        void Esc_Bitmap_Bloque(int pos, int i);
+
+        int Esc_GetFree_INodo();
+        int Esc_GetFree_Bloque();
+
+        int Esc_GetPos_INodo(string pth);
+
+        void Esc_Crear_Archivo();
+        int Esc_Crear_Carpeta();
+        int Esc_Crear_Carpeta_BloqueCarpeta(int updt_bc, int pos, int bc, string pth);
+
+        void Esc_FitSize(int size, int padre);
 };
 
 class Comandos{
@@ -326,6 +348,7 @@ class Rep_: public Comandos{
         void Graph_mbr();
         void Graph_disk();
         void Graph_inode();
+        void Graph_inodeRec(int pos);
         void Graph_journaling();
         void Graph_block();
         void Graph_bm_inode();

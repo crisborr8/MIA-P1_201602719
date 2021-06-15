@@ -83,11 +83,10 @@ void Get_Set::SetMBR(){
 }
 
 int Get_Set::Get_StartPartitionPoint(string path, string name){
-    archivo = fopen(path.c_str(), "rb");
+    archivo = fopen(path.c_str(), "r+b");
     mbr = Str::MBR();
     fseek(archivo, 0, SEEK_SET);
     fread(&mbr, sizeof(mbr), 1, archivo);
-    fclose(archivo);
     for(i_aux = 0; i_aux < 4; i_aux++){
         part = mbr.p[i_aux];
         if(part.status == 'A'){

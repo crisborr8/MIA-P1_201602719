@@ -298,7 +298,8 @@ void Fdisk_::Eliminar(){
                                 }
                                 if(delet == "full"){
                                     fseek(archivo, ebr.start, SEEK_SET);
-                                    fwrite("0", 1, ebr.size, archivo);
+                                    char zero[ebr.size] = {'0'};
+                                    fwrite(&zero, sizeof(zero), 1, archivo);
                                 }
                                 fseek(archivo, f_start, SEEK_SET);
                                 fwrite(&ebr, sizeof(ebr), 1, archivo);
@@ -320,7 +321,8 @@ void Fdisk_::Eliminar(){
                         strcpy(mbr.p[i].name, "");
                         if(delet == "full") {
                             fseek(archivo, mbr.p[i].start, SEEK_SET);
-                            fwrite("0", 1, mbr.p[i].size, archivo);
+                            char zero[mbr.p[i].size] = {'0'};
+                            fwrite(&zero, sizeof(zero), 1, archivo);
                         }
                         gs.Ordernar_MBR();
                         fseek(archivo, 0, SEEK_SET);
